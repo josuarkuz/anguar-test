@@ -1,0 +1,81 @@
+<nav class="navigation-bar" aria-label="Primary">
+  <div class="navigation-bar__inner">
+    <a class="navigation-bar__brand" href="#home">
+      MindTeams A11y Demo
+    </a>
+
+    <button
+      class="navigation-bar__mobile-toggle"
+      type="button"
+      [attr.aria-expanded]="mobileMenuOpen()"
+      aria-controls="primary-navigation"
+      aria-label="Toggle navigation menu"
+      (click)="toggleMobileMenu()"
+    >
+      <span class="navigation-bar__mobile-toggle-line"></span>
+      <span class="navigation-bar__mobile-toggle-line"></span>
+      <span class="navigation-bar__mobile-toggle-line"></span>
+    </button>
+
+    <div
+      id="primary-navigation"
+      class="navigation-bar__menu"
+      [class.navigation-bar__menu--open]="mobileMenuOpen()"
+    >
+      <ul class="navigation-bar__list">
+        @for (item of navItems; track item.label) {
+          <li class="navigation-bar__item">
+            @if (!item.children?.length) {
+              <a
+                class="navigation-bar__link"
+                [href]="item.href || '#'"
+                (click)="closeMobileMenu()"
+              >
+                {{ item.label }}
+              </a>
+            } @else {
+              <div
+                class="navigation-bar__dropdown"
+                [class.navigation-bar__dropdown--open]="productsMenuOpen()"
+              >
+                <button
+                  id="components-menu-button"
+                  class="navigation-bar__link navigation-bar__dropdown-trigger"
+                  type="button"
+                  aria-haspopup="true"
+                  [attr.aria-expanded]="productsMenuOpen()"
+                  aria-controls="components-menu"
+                  (click)="toggleProductsMenu()"
+                  (keydown)="onMenuButtonKeydown($event)"
+                >
+                  {{ item.label }}
+                  <span class="navigation-bar__caret" aria-hidden="true">▾</span>
+                </button>
+
+                <ul
+                  id="components-menu"
+                  class="navigation-bar__dropdown-menu"
+                  role="menu"
+                >
+                  @for (child of item.children; track child.label) {
+                    <li role="none">
+                      <a
+                        class="navigation-bar__dropdown-link"
+                        role="menuitem"
+                        [href]="child.href"
+                        (keydown)="onDropdownItemKeydown($event)"
+                        (click)="closeProductsMenu(); closeMobileMenu()"
+                      >
+                        {{ child.label }}
+                      </a>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</nav>

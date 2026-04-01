@@ -1,0 +1,51 @@
+<app-skip-navigation></app-skip-navigation>
+
+<header id="main-navigation" class="demo-header">
+  <app-navigation-bar></app-navigation-bar>
+</header>
+
+<main id="main-content" class="demo-main" tabindex="-1">
+  <section id="home">
+    <h1>Accessible Angular Component Library</h1>
+    <p>Internal training demo.</p>
+  </section>
+
+  <section id="navigation-bar" style="margin-top: 2rem;">
+    <h2>Navigation Bar</h2>
+    <p>Desktop + mobile responsive navigation demo.</p>
+  </section>
+
+  <section id="skip-navigation" style="margin-top: 2rem;">
+    <h2>Skip Navigation</h2>
+    <p>Use Tab from the top of the page to test skip links.</p>
+  </section>
+
+  <section id="modal-dialog" style="margin-top: 2rem;">
+    <h2>Modal Dialog</h2>
+    <p>Accessible modal dialog demo.</p>
+
+    <div style="margin-top: 1rem;">
+      <app-modal-dialog
+        [open]="true"
+        title="Delete item"
+        description="This action cannot be undone. Please confirm if you want to continue."
+      >
+        <p>
+          This is a static demo render of the modal dialog component.
+        </p>
+      </app-modal-dialog>
+    </div>
+  </section>
+
+  <section id="documentation" style="margin-top: 2rem;">
+    <h2>Documentation</h2>
+    <p>Component usage and accessibility notes.</p>
+  </section>
+
+  <section id="contact" style="margin-top: 2rem;">
+    <h2>Contact</h2>
+    <p>Demo footer content.</p>
+  </section>
+
+  <router-outlet />
+</main>

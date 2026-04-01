@@ -1,0 +1,29 @@
+:root {
+  --color-bg: #ffffff;
+  --color-surface: #f8f9fb;
+  --color-text: #1a1a1a;
+  --color-text-muted: #555555;
+  --color-border: #767676;
+  --color-primary: #005fcc;
+  --color-primary-contrast: #ffffff;
+  --color-danger: #b00020;
+  --color-success: #0a7f3f;
+
+  --focus-ring-color: #005fcc;
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+
+  --font-family-base: Arial, Helvetica, sans-serif;
+  --font-size-base: 16px;
+  --line-height-base: 1.5;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+}

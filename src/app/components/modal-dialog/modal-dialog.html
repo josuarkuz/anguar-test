@@ -1,0 +1,61 @@
+@if (open) {
+  <div
+    class="modal-dialog__backdrop"
+    (click)="onBackdropClick()"
+  >
+    <div
+      #dialogPanel
+      class="modal-dialog__panel"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-labelledby]="'modal-dialog-title'"
+      [attr.aria-describedby]="description ? 'modal-dialog-description' : null"
+      tabindex="-1"
+      (click)="onPanelClick($event)"
+    >
+      <div class="modal-dialog__header">
+        <div class="modal-dialog__heading-group">
+          <h2 id="modal-dialog-title" class="modal-dialog__title">
+            {{ title }}
+          </h2>
+
+          @if (description) {
+            <p id="modal-dialog-description" class="modal-dialog__description">
+              {{ description }}
+            </p>
+          }
+        </div>
+
+        <button
+          class="modal-dialog__close"
+          type="button"
+          aria-label="Close dialog"
+          (click)="close()"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="modal-dialog__content">
+        <ng-content></ng-content>
+      </div>
+
+      <div class="modal-dialog__footer">
+        <button
+          class="modal-dialog__secondary-button"
+          type="button"
+          (click)="close()"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="modal-dialog__primary-button"
+          type="button"
+        >
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+}

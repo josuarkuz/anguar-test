@@ -1,0 +1,11 @@
+<nav class="skip-navigation" aria-label="Skip links">
+  @for (link of links; track link.targetId) {
+    <a
+      class="skip-link"
+      [href]="'#' + link.targetId"
+      (click)="onSkip(link.targetId, $event)"
+    >
+      {{ link.label }}
+    </a>
+  }
+</nav>

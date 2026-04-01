@@ -1,0 +1,119 @@
+:host {
+  display: block;
+}
+
+.modal-dialog__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.48);
+}
+
+.modal-dialog__panel {
+  width: min(100%, 36rem);
+  max-height: 90vh;
+  overflow: auto;
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 1rem;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.18);
+  padding: 1.5rem;
+}
+
+.modal-dialog__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.modal-dialog__heading-group {
+  flex: 1;
+}
+
+.modal-dialog__title {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.modal-dialog__description {
+  margin: 0.5rem 0 0;
+  color: #4a4a4a;
+  line-height: 1.5;
+}
+
+.modal-dialog__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid #767676;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  color: #1a1a1a;
+  font: inherit;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.modal-dialog__content {
+  margin-top: 1rem;
+  line-height: 1.5;
+}
+
+.modal-dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.modal-dialog__secondary-button,
+.modal-dialog__primary-button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modal-dialog__secondary-button {
+  border: 1px solid #767676;
+  background: #ffffff;
+  color: #1a1a1a;
+}
+
+.modal-dialog__primary-button {
+  border: 1px solid #005fcc;
+  background: #005fcc;
+  color: #ffffff;
+}
+
+@media (max-width: 640px) {
+  .modal-dialog__backdrop {
+    padding: 1rem;
+    align-items: flex-end;
+  }
+
+  .modal-dialog__panel {
+    width: 100%;
+    border-radius: 1rem 1rem 0 0;
+  }
+
+  .modal-dialog__footer {
+    flex-direction: column-reverse;
+  }
+
+  .modal-dialog__secondary-button,
+  .modal-dialog__primary-button {
+    width: 100%;
+  }
+}
