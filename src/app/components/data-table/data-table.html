@@ -1,1 +1,117 @@
-<p>data-table works!</p>
+<div class="data-table">
+  <div class="data-table__header">
+    <h2 class="data-table__title">Data Table</h2>
+    <p class="data-table__description">
+      Sortable, paginated table with semantic headers and accessible controls.
+    </p>
+  </div>
+
+  <div class="data-table__table-wrapper">
+    <table class="data-table__table">
+      <caption class="visually-hidden">
+        Team members table with sortable columns and pagination
+      </caption>
+
+      <thead>
+      <tr>
+        <th scope="col" [attr.aria-sort]="getAriaSort('name')">
+          <button
+            class="data-table__sort-button"
+            type="button"
+            [attr.aria-label]="getSortLabel('name', 'name')"
+            (click)="sortBy('name')"
+          >
+            <span>Name</span>
+            <span class="data-table__sort-indicator" aria-hidden="true">
+                {{ getSortIndicator('name') }}
+              </span>
+          </button>
+        </th>
+
+        <th scope="col" [attr.aria-sort]="getAriaSort('role')">
+          <button
+            class="data-table__sort-button"
+            type="button"
+            [attr.aria-label]="getSortLabel('role', 'role')"
+            (click)="sortBy('role')"
+          >
+            <span>Role</span>
+            <span class="data-table__sort-indicator" aria-hidden="true">
+                {{ getSortIndicator('role') }}
+              </span>
+          </button>
+        </th>
+
+        <th scope="col" [attr.aria-sort]="getAriaSort('team')">
+          <button
+            class="data-table__sort-button"
+            type="button"
+            [attr.aria-label]="getSortLabel('team', 'team')"
+            (click)="sortBy('team')"
+          >
+            <span>Team</span>
+            <span class="data-table__sort-indicator" aria-hidden="true">
+                {{ getSortIndicator('team') }}
+              </span>
+          </button>
+        </th>
+
+        <th scope="col" [attr.aria-sort]="getAriaSort('status')">
+          <button
+            class="data-table__sort-button"
+            type="button"
+            [attr.aria-label]="getSortLabel('status', 'status')"
+            (click)="sortBy('status')"
+          >
+            <span>Status</span>
+            <span class="data-table__sort-indicator" aria-hidden="true">
+                {{ getSortIndicator('status') }}
+              </span>
+          </button>
+        </th>
+      </tr>
+      </thead>
+
+      <tbody>
+        @for (row of paginatedRows(); track row.id) {
+          <tr>
+            <th scope="row">{{ row.name }}</th>
+            <td>{{ row.role }}</td>
+            <td>{{ row.team }}</td>
+            <td>{{ row.status }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="data-table__footer">
+    <p class="data-table__results" aria-live="polite">
+      Showing {{ pageStart() }} to {{ pageEnd() }} of {{ rows().length }} results
+    </p>
+
+    <div class="data-table__pagination">
+      <button
+        class="data-table__pagination-button"
+        type="button"
+        [disabled]="currentPage() === 1"
+        (click)="previousPage()"
+      >
+        Previous
+      </button>
+
+      <span class="data-table__page-indicator" aria-live="polite">
+        Page {{ currentPage() }} of {{ totalPages() }}
+      </span>
+
+      <button
+        class="data-table__pagination-button"
+        type="button"
+        [disabled]="currentPage() === totalPages()"
+        (click)="nextPage()"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>

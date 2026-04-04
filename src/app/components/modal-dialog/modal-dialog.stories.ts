@@ -5,20 +5,21 @@ const meta: Meta<ModalDialog> = {
   title: 'Components/Modal Dialog',
   component: ModalDialog,
   tags: ['autodocs'],
-  args: {
-    open: true,
-    title: 'Delete item',
-    description: 'This action cannot be undone. Please confirm if you want to continue.',
-    closeOnBackdropClick: true,
-  },
-  render: (args) => ({
-    props: args,
+};
+
+export default meta;
+
+type Story = StoryObj<ModalDialog>;
+
+export const Default: Story = {
+  render: () => ({
+    imports: [ModalDialog],
     template: `
       <app-modal-dialog
-        [open]="open"
-        [title]="title"
-        [description]="description"
-        [closeOnBackdropClick]="closeOnBackdropClick"
+        [open]="true"
+        [title]="'Delete item'"
+        [description]="'This action cannot be undone. Please confirm if you want to continue.'"
+        [closeOnBackdropClick]="true"
       >
         <p>
           The modal content area can contain form fields, warnings, or any other
@@ -27,16 +28,4 @@ const meta: Meta<ModalDialog> = {
       </app-modal-dialog>
     `,
   }),
-};
-
-export default meta;
-
-type Story = StoryObj<ModalDialog>;
-
-export const Default: Story = {};
-
-export const WithoutDescription: Story = {
-  args: {
-    description: undefined,
-  },
 };

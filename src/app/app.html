@@ -24,16 +24,45 @@
     <h2>Modal Dialog</h2>
     <p>Accessible modal dialog demo.</p>
 
+    <button
+      class="demo-button"
+      type="button"
+      (click)="openModal()"
+    >
+      Open modal dialog
+    </button>
+
     <div style="margin-top: 1rem;">
       <app-modal-dialog
-        [open]="true"
+        [open]="isModalOpen()"
         title="Delete item"
-        description="This action cannot be undone. Please confirm if you want to continue."
+        [description]="'This action cannot be undone. Please confirm if you want to continue.'"
+        [closeOnBackdropClick]="true"
+        (openChange)="onModalOpenChange($event)"
       >
         <p>
-          This is a static demo render of the modal dialog component.
+          This is a real interactive demo. Open it with the button, then test
+          keyboard navigation, Escape, and focus return to the trigger.
         </p>
       </app-modal-dialog>
+    </div>
+  </section>
+
+  <section id="form-inputs" class="demo-section">
+    <h2>Form Inputs</h2>
+    <p>Accessible text, select, radio, checkbox, and textarea controls with validation.</p>
+
+    <div style="margin-top: 1rem;">
+      <app-form-inputs></app-form-inputs>
+    </div>
+  </section>
+
+  <section id="data-table" class="demo-section">
+    <h2>Data Table</h2>
+    <p>Accessible table with sortable columns and pagination.</p>
+
+    <div style="margin-top: 1rem;">
+      <app-data-table></app-data-table>
     </div>
   </section>
 

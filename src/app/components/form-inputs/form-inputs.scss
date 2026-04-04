@@ -1,0 +1,108 @@
+@use '../../../styles/mixins' as mixins;
+
+:host {
+  display: block;
+}
+
+.form-inputs {
+  @include mixins.card-base;
+  max-width: 40rem;
+}
+
+.form-inputs__header {
+  margin-bottom: var(--space-6);
+}
+
+.form-inputs__title {
+  @include mixins.section-title;
+  font-size: 1.5rem;
+}
+
+.form-inputs__description {
+  @include mixins.section-description;
+}
+
+.form-inputs__field {
+  margin-top: var(--space-5);
+}
+
+.form-inputs__label,
+.form-inputs__fieldset legend {
+  display: inline-block;
+  margin-bottom: var(--space-2);
+  font-weight: var(--font-weight-semibold);
+}
+
+.form-inputs__required-indicator {
+  color: var(--color-danger);
+}
+
+.form-inputs__hint {
+  margin: 0 0 var(--space-2);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.form-inputs__error {
+  margin: var(--space-2) 0 0;
+  color: var(--color-danger);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.5;
+}
+
+.form-inputs__control {
+  @include mixins.control-base;
+  width: 100%;
+}
+
+.form-inputs__control[aria-invalid='true'] {
+  border-color: var(--color-danger);
+}
+
+.form-inputs__control--textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.form-inputs__fieldset {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+
+.form-inputs__choice-group {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.form-inputs__choice {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--control-min-height);
+  cursor: pointer;
+}
+
+.form-inputs__choice input[type='radio'],
+.form-inputs__choice input[type='checkbox'] {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin: 0;
+}
+
+.form-inputs__choice--checkbox {
+  font-weight: var(--font-weight-medium);
+}
+
+.form-inputs__actions {
+  margin-top: var(--space-6);
+}
+
+.form-inputs__submit {
+  @include mixins.button-primary;
+}
+
+.form-inputs__submit:hover,
+.form-inputs__submit:focus-visible {
+  background: var(--color-primary-hover);
+}

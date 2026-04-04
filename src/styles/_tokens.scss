@@ -1,29 +1,64 @@
 :root {
+  /* Colors */
   --color-bg: #ffffff;
   --color-surface: #f8f9fb;
+  --color-surface-secondary: #edf4ff;
   --color-text: #1a1a1a;
   --color-text-muted: #555555;
   --color-border: #767676;
+  --color-border-subtle: #d9d9d9;
+
   --color-primary: #005fcc;
+  --color-primary-hover: #0047a3;
   --color-primary-contrast: #ffffff;
+
   --color-danger: #b00020;
   --color-success: #0a7f3f;
 
+  /* Focus */
   --focus-ring-color: #005fcc;
   --focus-ring-width: 3px;
   --focus-ring-offset: 2px;
 
+  /* Typography */
   --font-family-base: Arial, Helvetica, sans-serif;
   --font-size-base: 16px;
   --line-height-base: 1.5;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
 
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 2rem;
+  --space-8: 3rem;
 
-  --radius-sm: 4px;
-  --radius-md: 8px;
+  /* Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* Borders */
+  --border-width: 1px;
+  --border-default: 1px solid var(--color-border);
+  --border-subtle: 1px solid var(--color-border-subtle);
+
+  /* Controls */
+  --control-min-height: 44px;
+  --control-padding-inline: 0.875rem;
+  --control-padding-block: 0.75rem;
+
+  /* Layout */
+  --content-max-width: 72rem;
+
+  /* Shadows */
+  --shadow-sm: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 1rem 2rem rgba(0, 0, 0, 0.18);
 }

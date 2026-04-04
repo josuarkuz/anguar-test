@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ModalDialog } from './modal-dialog';
+import { spyOn } from 'storybook/test';
 
 describe('ModalDialog', () => {
   let component: ModalDialog;
@@ -41,6 +42,15 @@ describe('ModalDialog', () => {
     component.close();
 
     expect(component.open).toBeFalsy();
+  });
+
+  it('should emit openChange when closed', () => {
+    component.open = true;
+    spyOn(component.openChange, 'emit');
+
+    component.close();
+
+    expect(component.openChange.emit).toHaveBeenCalledWith(false);
   });
 
   it('should close on backdrop click when enabled', () => {

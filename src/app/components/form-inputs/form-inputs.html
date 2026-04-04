@@ -1,1 +1,152 @@
-<p>form-inputs works!</p>
+<form
+  class="form-inputs"
+  novalidate
+  (ngSubmit)="submitForm()"
+  aria-labelledby="form-inputs-title"
+>
+  <div class="form-inputs__header">
+    <h2 id="form-inputs-title" class="form-inputs__title">Form Inputs</h2>
+    <p class="form-inputs__description">
+      Accessible form controls with labels, hints, required states, and error messaging.
+    </p>
+  </div>
+
+  <div class="form-inputs__field">
+    <label class="form-inputs__label" for="full-name">
+      Full name
+      <span class="form-inputs__required-indicator" aria-hidden="true">*</span>
+    </label>
+
+    <p id="full-name-hint" class="form-inputs__hint">
+      Enter your first and last name.
+    </p>
+
+    <input
+      id="full-name"
+      name="fullName"
+      class="form-inputs__control"
+      type="text"
+      [(ngModel)]="name"
+      [attr.aria-required]="true"
+      [attr.aria-invalid]="showNameError()"
+      [attr.aria-describedby]="showNameError() ? 'full-name-hint full-name-error' : 'full-name-hint'"
+    />
+
+    @if (showNameError()) {
+      <p id="full-name-error" class="form-inputs__error" role="alert">
+        Full name is required.
+      </p>
+    }
+  </div>
+
+  <div class="form-inputs__field">
+    <label class="form-inputs__label" for="favorite-framework">
+      Favorite framework
+      <span class="form-inputs__required-indicator" aria-hidden="true">*</span>
+    </label>
+
+    <p id="favorite-framework-hint" class="form-inputs__hint">
+      Choose the framework you work with most often.
+    </p>
+
+    <select
+      id="favorite-framework"
+      name="favoriteFramework"
+      class="form-inputs__control"
+      [(ngModel)]="favoriteFramework"
+      [attr.aria-required]="true"
+      [attr.aria-invalid]="showFrameworkError()"
+      [attr.aria-describedby]="showFrameworkError() ? 'favorite-framework-hint favorite-framework-error' : 'favorite-framework-hint'"
+    >
+      <option value="">Select one option</option>
+      <option value="angular">Angular</option>
+      <option value="react">React</option>
+      <option value="vue">Vue</option>
+      <option value="svelte">Svelte</option>
+    </select>
+
+    @if (showFrameworkError()) {
+      <p id="favorite-framework-error" class="form-inputs__error" role="alert">
+        Favorite framework is required.
+      </p>
+    }
+  </div>
+
+  <fieldset
+    class="form-inputs__field form-inputs__fieldset"
+    [attr.aria-describedby]="showContactMethodError() ? 'contact-method-hint contact-method-error' : 'contact-method-hint'"
+  >
+    <legend class="form-inputs__label">
+      Preferred contact method
+      <span class="form-inputs__required-indicator" aria-hidden="true">*</span>
+    </legend>
+
+    <p id="contact-method-hint" class="form-inputs__hint">
+      Select one contact method.
+    </p>
+
+    <div class="form-inputs__choice-group">
+      <label class="form-inputs__choice">
+        <input
+          type="radio"
+          name="contactMethod"
+          value="email"
+          [(ngModel)]="contactMethod"
+        />
+        <span>Email</span>
+      </label>
+
+      <label class="form-inputs__choice">
+        <input
+          type="radio"
+          name="contactMethod"
+          value="phone"
+          [(ngModel)]="contactMethod"
+        />
+        <span>Phone</span>
+      </label>
+    </div>
+
+    @if (showContactMethodError()) {
+      <p id="contact-method-error" class="form-inputs__error" role="alert">
+        Preferred contact method is required.
+      </p>
+    }
+  </fieldset>
+
+  <div class="form-inputs__field">
+    <label class="form-inputs__choice form-inputs__choice--checkbox">
+      <input
+        type="checkbox"
+        name="subscribeToUpdates"
+        [(ngModel)]="subscribeToUpdates"
+      />
+      <span>Subscribe to accessibility updates</span>
+    </label>
+  </div>
+
+  <div class="form-inputs__field">
+    <label class="form-inputs__label" for="notes">
+      Additional notes
+    </label>
+
+    <p id="notes-hint" class="form-inputs__hint">
+      Optional. Share anything else that would help.
+    </p>
+
+    <textarea
+      id="notes"
+      name="notes"
+      class="form-inputs__control form-inputs__control--textarea"
+      [(ngModel)]="notes"
+      aria-describedby="notes-hint"
+      rows="5"
+    ></textarea>
+  </div>
+
+  <div class="form-inputs__actions">
+    <button class="form-inputs__submit" type="submit">
+      Submit form
+    </button>
+  </div>
+</form>

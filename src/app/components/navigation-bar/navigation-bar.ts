@@ -31,6 +31,8 @@ export class NavigationBar {
         { label: 'Skip Navigation', href: '#skip-navigation' },
         { label: 'Navigation Bar', href: '#navigation-bar' },
         { label: 'Modal Dialog', href: '#modal-dialog' },
+        { label: 'Form Inputs', href: '#form-inputs' },
+        { label: 'Data Table', href: '#data-table' },
       ],
     },
     { label: 'Documentation', href: '#documentation' },

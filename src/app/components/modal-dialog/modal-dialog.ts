@@ -2,9 +2,11 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   ElementRef,
+  EventEmitter,
   HostListener,
   Input,
   OnChanges,
+  Output,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -22,23 +24,35 @@ export class ModalDialog implements OnChanges {
   @Input() description?: string;
   @Input() closeOnBackdropClick = true;
 
+  @Output() openChange = new EventEmitter<boolean>();
+  @Output() closed = new EventEmitter<void>();
+
   @ViewChild('dialogPanel') dialogPanel?: ElementRef<HTMLElement>;
 
   private previouslyFocusedElement: HTMLElement | null = null;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['open']) {
-      if (this.open) {
-        this.previouslyFocusedElement = document.activeElement as HTMLElement | null;
-        setTimeout(() => this.focusFirstElement());
-      } else {
-        this.restoreFocus();
-      }
+    if (!changes['open']) {
+      return;
     }
+
+    if (this.open) {
+      this.previouslyFocusedElement = document.activeElement as HTMLElement | null;
+      setTimeout(() => this.focusFirstElement());
+      return;
+    }
+
+    this.restoreFocus();
   }
 
   close(): void {
+    if (!this.open) {
+      return;
+    }
+
     this.open = false;
+    this.openChange.emit(false);
+    this.closed.emit();
     this.restoreFocus();
   }
 

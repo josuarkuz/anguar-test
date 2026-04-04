@@ -1,3 +1,5 @@
+@use '../../../styles/mixins' as mixins;
+
 :host {
   display: block;
 }
@@ -9,7 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: var(--space-6);
   background: rgba(0, 0, 0, 0.48);
 }
 
@@ -17,18 +19,18 @@
   width: min(100%, 36rem);
   max-height: 90vh;
   overflow: auto;
-  background: #ffffff;
-  border: 1px solid #d9d9d9;
-  border-radius: 1rem;
-  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.18);
-  padding: 1.5rem;
+  background: var(--color-bg);
+  border: var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-6);
 }
 
 .modal-dialog__header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .modal-dialog__heading-group {
@@ -42,70 +44,53 @@
 }
 
 .modal-dialog__description {
-  margin: 0.5rem 0 0;
-  color: #4a4a4a;
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-muted);
   line-height: 1.5;
 }
 
 .modal-dialog__close {
+  @include mixins.button-secondary;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 44px;
-  min-height: 44px;
-  border: 1px solid #767676;
-  border-radius: 0.75rem;
-  background: #ffffff;
-  color: #1a1a1a;
-  font: inherit;
   font-size: 1.25rem;
-  cursor: pointer;
 }
 
 .modal-dialog__content {
-  margin-top: 1rem;
+  margin-top: var(--space-4);
   line-height: 1.5;
 }
 
 .modal-dialog__footer {
   display: flex;
   justify-content: flex-end;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
-}
-
-.modal-dialog__secondary-button,
-.modal-dialog__primary-button {
-  min-width: 44px;
-  min-height: 44px;
-  padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
 }
 
 .modal-dialog__secondary-button {
-  border: 1px solid #767676;
-  background: #ffffff;
-  color: #1a1a1a;
+  @include mixins.button-secondary;
 }
 
 .modal-dialog__primary-button {
-  border: 1px solid #005fcc;
-  background: #005fcc;
-  color: #ffffff;
+  @include mixins.button-primary;
+}
+
+.modal-dialog__primary-button:hover,
+.modal-dialog__primary-button:focus-visible {
+  background: var(--color-primary-hover);
 }
 
 @media (max-width: 640px) {
   .modal-dialog__backdrop {
-    padding: 1rem;
+    padding: var(--space-4);
     align-items: flex-end;
   }
 
   .modal-dialog__panel {
     width: 100%;
-    border-radius: 1rem 1rem 0 0;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   }
 
   .modal-dialog__footer {

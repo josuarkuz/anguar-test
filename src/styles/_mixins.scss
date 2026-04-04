@@ -1,0 +1,45 @@
+@mixin control-base {
+  min-width: 44px;
+  min-height: var(--control-min-height);
+  padding: var(--control-padding-block) var(--control-padding-inline);
+  border: var(--border-default);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+}
+
+@mixin button-primary {
+  @include control-base;
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+@mixin button-secondary {
+  @include control-base;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+@mixin card-base {
+  padding: var(--space-6);
+  border: var(--border-subtle);
+  border-radius: var(--radius-xl);
+  background: var(--color-bg);
+}
+
+@mixin section-title {
+  margin: 0 0 var(--space-3);
+  line-height: 1.2;
+}
+
+@mixin section-description {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
