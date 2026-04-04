@@ -1,1 +1,46 @@
-<p>tabs works!</p>
+<div class="tabs">
+  <div class="tabs__header">
+    <h2 class="tabs__title">Tabs</h2>
+    <p class="tabs__description">
+      Accessible tab interface with keyboard navigation and ARIA relationships.
+    </p>
+  </div>
+
+  <div
+    class="tabs__list"
+    role="tablist"
+    aria-label="Component information tabs"
+  >
+    @for (tab of tabs; track tab.id; let i = $index) {
+      <button
+        #tabButton
+        class="tabs__tab"
+        [class.tabs__tab--active]="activeIndex() === i"
+        type="button"
+        role="tab"
+        [id]="getTabId(i)"
+        [attr.aria-selected]="activeIndex() === i"
+        [attr.aria-controls]="getPanelId(i)"
+        [attr.tabindex]="activeIndex() === i ? 0 : -1"
+        (click)="selectTab(i)"
+        (keydown)="onTabKeydown($event, i)"
+      >
+        {{ tab.label }}
+      </button>
+    }
+  </div>
+
+  @for (tab of tabs; track tab.id; let i = $index) {
+    @if (activeIndex() === i) {
+      <section
+        class="tabs__panel"
+        role="tabpanel"
+        [id]="getPanelId(i)"
+        [attr.aria-labelledby]="getTabId(i)"
+        tabindex="0"
+      >
+        <p>{{ tab.content }}</p>
+      </section>
+    }
+  }
+</div>

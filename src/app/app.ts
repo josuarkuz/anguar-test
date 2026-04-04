@@ -5,10 +5,21 @@ import { NavigationBar } from './components/navigation-bar/navigation-bar';
 import { ModalDialog } from './components/modal-dialog/modal-dialog';
 import { FormInputs } from './components/form-inputs/form-inputs';
 import { DataTable } from './components/data-table/data-table';
+import { DropdownMenu } from './components/dropdown-menu/dropdown-menu';
+import { Tabs } from './components/tabs/tabs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavigationBar, SkipNavigation, ModalDialog, FormInputs, DataTable],
+  imports: [
+    RouterOutlet,
+    NavigationBar,
+    SkipNavigation,
+    ModalDialog,
+    FormInputs,
+    DataTable,
+    DropdownMenu,
+    Tabs,
+  ],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

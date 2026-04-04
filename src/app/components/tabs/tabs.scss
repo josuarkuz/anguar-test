@@ -1,0 +1,79 @@
+@use '../../../styles/mixins' as mixins;
+
+:host {
+  display: block;
+}
+
+.tabs {
+  @include mixins.card-base;
+}
+
+.tabs__header {
+  margin-bottom: var(--space-6);
+}
+
+.tabs__title {
+  @include mixins.section-title;
+  font-size: 1.5rem;
+}
+
+.tabs__description {
+  @include mixins.section-description;
+}
+
+.tabs__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  border-bottom: var(--border-subtle);
+  padding-bottom: var(--space-2);
+}
+
+.tabs__tab {
+  min-height: var(--control-min-height);
+  padding: var(--space-3) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+}
+
+.tabs__tab:hover,
+.tabs__tab:focus-visible {
+  background: var(--color-surface-secondary);
+}
+
+.tabs__tab--active {
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
+  font-weight: var(--font-weight-semibold);
+}
+
+.tabs__tab--active:hover,
+.tabs__tab--active:focus-visible {
+  background: var(--color-primary-hover);
+}
+
+.tabs__panel {
+  padding-top: var(--space-6);
+}
+
+.tabs__panel p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .tabs__list {
+    flex-direction: column;
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .tabs__tab {
+    text-align: left;
+  }
+}

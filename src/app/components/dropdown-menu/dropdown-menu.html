@@ -1,1 +1,104 @@
-<p>dropdown-menu works!</p>
+<div class="dropdown-menu">
+  <div class="dropdown-menu__header">
+    <h2 class="dropdown-menu__title">Dropdown Menu</h2>
+    <p class="dropdown-menu__description">
+      Accessible single-select and multi-select dropdown menus with keyboard navigation.
+    </p>
+  </div>
+
+  <div class="dropdown-menu__grid">
+    <section class="dropdown-menu__section" aria-labelledby="single-select-title">
+      <h3 id="single-select-title" class="dropdown-menu__section-title">Single Select</h3>
+
+      <div class="dropdown-menu__control">
+        <button
+          #singleMenuButton
+          id="single-menu-button"
+          class="dropdown-menu__trigger"
+          type="button"
+          aria-haspopup="listbox"
+          [attr.aria-expanded]="singleOpen()"
+          aria-controls="single-menu-listbox"
+          (click)="toggleSingleMenu()"
+          (keydown)="onSingleButtonKeydown($event)"
+        >
+          <span>{{ selectedSingleLabel }}</span>
+          <span class="dropdown-menu__caret" aria-hidden="true">▾</span>
+        </button>
+
+        @if (singleOpen()) {
+          <ul
+            id="single-menu-listbox"
+            class="dropdown-menu__listbox"
+            role="listbox"
+            aria-labelledby="single-menu-button"
+          >
+            @for (option of singleOptions; track option.id; let i = $index) {
+              <li
+                class="dropdown-menu__option"
+                [class.dropdown-menu__option--active]="activeSingleIndex() === i"
+                [class.dropdown-menu__option--selected]="selectedSingle() === option.id"
+                role="option"
+                [attr.aria-selected]="selectedSingle() === option.id"
+                tabindex="0"
+                (click)="selectSingle(option.id)"
+                (keydown)="onSingleOptionKeydown($event)"
+              >
+                {{ option.label }}
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    </section>
+
+    <section class="dropdown-menu__section" aria-labelledby="multi-select-title">
+      <h3 id="multi-select-title" class="dropdown-menu__section-title">Multi Select</h3>
+
+      <div class="dropdown-menu__control">
+        <button
+          #multiMenuButton
+          id="multi-menu-button"
+          class="dropdown-menu__trigger"
+          type="button"
+          aria-haspopup="listbox"
+          [attr.aria-expanded]="multiOpen()"
+          aria-controls="multi-menu-listbox"
+          (click)="toggleMultiMenu()"
+          (keydown)="onMultiButtonKeydown($event)"
+        >
+          <span>{{ selectedMultiLabel }}</span>
+          <span class="dropdown-menu__caret" aria-hidden="true">▾</span>
+        </button>
+
+        @if (multiOpen()) {
+          <ul
+            id="multi-menu-listbox"
+            class="dropdown-menu__listbox"
+            role="listbox"
+            aria-labelledby="multi-menu-button"
+            aria-multiselectable="true"
+          >
+            @for (option of multiOptions; track option.id; let i = $index) {
+              <li
+                class="dropdown-menu__option"
+                [class.dropdown-menu__option--active]="activeMultiIndex() === i"
+                [class.dropdown-menu__option--selected]="isMultiSelected(option.id)"
+                role="option"
+                [attr.aria-selected]="isMultiSelected(option.id)"
+                tabindex="0"
+                (click)="toggleMultiSelection(option.id)"
+                (keydown)="onMultiOptionKeydown($event)"
+              >
+                <span>{{ option.label }}</span>
+                @if (isMultiSelected(option.id)) {
+                  <span class="dropdown-menu__check" aria-hidden="true">✓</span>
+                }
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    </section>
+  </div>
+</div>

@@ -33,6 +33,8 @@ export class NavigationBar {
         { label: 'Modal Dialog', href: '#modal-dialog' },
         { label: 'Form Inputs', href: '#form-inputs' },
         { label: 'Data Table', href: '#data-table' },
+        { label: 'Dropdown Menu', href: '#dropdown-menu' },
+        { label: 'Tabs', href: '#tabs' },
       ],
     },
     { label: 'Documentation', href: '#documentation' },
