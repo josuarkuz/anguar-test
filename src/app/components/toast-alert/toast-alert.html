@@ -1,1 +1,70 @@
-<p>toast-alert works!</p>
+<div class="toast-alert">
+  <div class="toast-alert__header">
+    <h2 class="toast-alert__title">Toast / Alert</h2>
+    <p class="toast-alert__description">
+      Accessible live-region notifications with optional auto-dismiss and manual close.
+    </p>
+  </div>
+
+  <div class="toast-alert__actions">
+    <button
+      class="toast-alert__action-button"
+      type="button"
+      (click)="showSuccessToast()"
+    >
+      Show success toast
+    </button>
+
+    <button
+      class="toast-alert__action-button"
+      type="button"
+      (click)="showInfoToast()"
+    >
+      Show info toast
+    </button>
+
+    <button
+      class="toast-alert__action-button"
+      type="button"
+      (click)="showWarningToast()"
+    >
+      Show warning alert
+    </button>
+
+    <button
+      class="toast-alert__action-button"
+      type="button"
+      (click)="showErrorToast()"
+    >
+      Show error alert
+    </button>
+  </div>
+
+  <div class="toast-alert__stack" aria-live="polite" aria-relevant="additions removals">
+    @for (toast of toasts(); track toast.id) {
+      <section
+        class="toast-alert__item"
+        [class.toast-alert__item--success]="toast.type === 'success'"
+        [class.toast-alert__item--info]="toast.type === 'info'"
+        [class.toast-alert__item--warning]="toast.type === 'warning'"
+        [class.toast-alert__item--error]="toast.type === 'error'"
+        [attr.role]="getToastRole(toast.type)"
+        [attr.aria-live]="getToastRole(toast.type) === 'alert' ? 'assertive' : 'polite'"
+      >
+        <div class="toast-alert__content">
+          <h3 class="toast-alert__item-title">{{ toast.title }}</h3>
+          <p class="toast-alert__item-message">{{ toast.message }}</p>
+        </div>
+
+        <button
+          class="toast-alert__dismiss"
+          type="button"
+          [attr.aria-label]="'Dismiss ' + toast.title"
+          (click)="dismissToast(toast.id)"
+        >
+          ×
+        </button>
+      </section>
+    }
+  </div>
+</div>

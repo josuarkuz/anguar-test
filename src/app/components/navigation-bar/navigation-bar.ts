@@ -21,7 +21,7 @@ interface NavItem {
 })
 export class NavigationBar {
   mobileMenuOpen = signal(false);
-  productsMenuOpen = signal(false);
+  componentsMenuOpen = signal(false);
 
   navItems: NavItem[] = [
     { label: 'Home', href: '#home' },
@@ -35,6 +35,9 @@ export class NavigationBar {
         { label: 'Data Table', href: '#data-table' },
         { label: 'Dropdown Menu', href: '#dropdown-menu' },
         { label: 'Tabs', href: '#tabs' },
+        { label: 'Accordion', href: '#accordion' },
+        { label: 'Toast Alert', href: '#toast-alert' },
+        { label: 'Date Picker', href: '#date-picker' },
       ],
     },
     { label: 'Documentation', href: '#documentation' },
@@ -50,15 +53,15 @@ export class NavigationBar {
   }
 
   toggleProductsMenu(): void {
-    this.productsMenuOpen.update((value) => !value);
+    this.componentsMenuOpen.update((value) => !value);
   }
 
   openProductsMenu(): void {
-    this.productsMenuOpen.set(true);
+    this.componentsMenuOpen.set(true);
   }
 
   closeProductsMenu(): void {
-    this.productsMenuOpen.set(false);
+    this.componentsMenuOpen.set(false);
   }
 
   onMenuButtonKeydown(event: KeyboardEvent): void {

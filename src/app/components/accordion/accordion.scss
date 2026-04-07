@@ -1,0 +1,75 @@
+@use '../../../styles/mixins' as mixins;
+
+:host {
+  display: block;
+}
+
+.accordion {
+  @include mixins.card-base;
+}
+
+.accordion__header {
+  margin-bottom: var(--space-6);
+}
+
+.accordion__title {
+  @include mixins.section-title;
+  font-size: 1.5rem;
+}
+
+.accordion__description {
+  @include mixins.section-description;
+}
+
+.accordion__items {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.accordion__item {
+  border: var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+.accordion__item-heading {
+  margin: 0;
+}
+
+.accordion__trigger {
+  width: 100%;
+  min-height: var(--control-min-height);
+  padding: var(--space-4);
+  border: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: var(--font-weight-semibold);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  text-align: left;
+  cursor: pointer;
+}
+
+.accordion__trigger:hover,
+.accordion__trigger:focus-visible {
+  background: var(--color-surface-secondary);
+}
+
+.accordion__icon {
+  color: var(--color-text-muted);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.accordion__panel {
+  padding: 0 var(--space-4) var(--space-4);
+}
+
+.accordion__panel p {
+  margin: 0;
+  line-height: 1.6;
+}

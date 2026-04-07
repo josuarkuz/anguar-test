@@ -36,14 +36,14 @@
             } @else {
               <div
                 class="navigation-bar__dropdown"
-                [class.navigation-bar__dropdown--open]="productsMenuOpen()"
+                [class.navigation-bar__dropdown--open]="componentsMenuOpen()"
               >
                 <button
                   id="components-menu-button"
                   class="navigation-bar__link navigation-bar__dropdown-trigger"
                   type="button"
                   aria-haspopup="true"
-                  [attr.aria-expanded]="productsMenuOpen()"
+                  [attr.aria-expanded]="componentsMenuOpen()"
                   aria-controls="components-menu"
                   (click)="toggleProductsMenu()"
                   (keydown)="onMenuButtonKeydown($event)"

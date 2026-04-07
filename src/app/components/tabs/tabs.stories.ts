@@ -5,6 +5,14 @@ const meta: Meta<Tabs> = {
   title: 'Components/Tabs',
   component: Tabs,
   tags: ['autodocs'],
+  render: () => ({
+    imports: [Tabs],
+    template: `
+      <div style="max-width: 800px;">
+        <app-tabs></app-tabs>
+      </div>
+    `,
+  }),
 };
 
 export default meta;

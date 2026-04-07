@@ -12,3 +12,11 @@ export default meta;
 type Story = StoryObj<FormInputs>;
 
 export const Default: Story = {};
+
+export const ValidationState: Story = {
+  render: () => ({
+    imports: [FormInputs],
+    template: `<app-form-inputs></app-form-inputs>`,
+  }),
+  play: async () => {},
+};

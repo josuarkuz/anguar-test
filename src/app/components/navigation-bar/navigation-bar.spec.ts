@@ -30,13 +30,13 @@ describe('NavigationBarComponent', () => {
   });
 
   it('should toggle dropdown menu', () => {
-    expect(component.productsMenuOpen()).toBeFalsy();
+    expect(component.componentsMenuOpen()).toBeFalsy();
 
     component.toggleProductsMenu();
-    expect(component.productsMenuOpen()).toBeTruthy();
+    expect(component.componentsMenuOpen()).toBeTruthy();
 
     component.toggleProductsMenu();
-    expect(component.productsMenuOpen()).toBeFalsy();
+    expect(component.componentsMenuOpen()).toBeFalsy();
   });
 
   it('should render navigation landmark', () => {

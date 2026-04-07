@@ -7,6 +7,9 @@ import { FormInputs } from './components/form-inputs/form-inputs';
 import { DataTable } from './components/data-table/data-table';
 import { DropdownMenu } from './components/dropdown-menu/dropdown-menu';
 import { Tabs } from './components/tabs/tabs';
+import { Accordion } from './components/accordion/accordion';
+import { ToastAlert } from './components/toast-alert/toast-alert';
+import { DatePicker } from './components/date-picker/date-picker';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +22,9 @@ import { Tabs } from './components/tabs/tabs';
     DataTable,
     DropdownMenu,
     Tabs,
+    Accordion,
+    ToastAlert,
+    DatePicker,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'

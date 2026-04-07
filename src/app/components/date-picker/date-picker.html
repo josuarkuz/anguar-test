@@ -1,1 +1,107 @@
-<p>date-picker works!</p>
+<div class="date-picker">
+  <div class="date-picker__header">
+    <h2 class="date-picker__title">Date Picker</h2>
+    <p class="date-picker__description">
+      Accessible calendar with ARIA grid semantics and keyboard navigation.
+    </p>
+  </div>
+
+  <div class="date-picker__control">
+    <button
+      id="date-picker-trigger"
+      class="date-picker__trigger"
+      type="button"
+      aria-haspopup="dialog"
+      [attr.aria-expanded]="isOpen()"
+      aria-controls="date-picker-dialog"
+      (click)="toggleCalendar()"
+    >
+      <span>{{ selectedDateLabel }}</span>
+      <span class="date-picker__trigger-icon" aria-hidden="true">📅</span>
+    </button>
+
+    @if (isOpen()) {
+      <div
+        id="date-picker-dialog"
+        class="date-picker__popup"
+        role="dialog"
+        aria-modal="false"
+        aria-labelledby="date-picker-month-label"
+      >
+        <div class="date-picker__toolbar">
+          <button
+            class="date-picker__nav-button"
+            type="button"
+            aria-label="Previous month"
+            (click)="previousMonth()"
+          >
+            ‹
+          </button>
+
+          <h3 id="date-picker-month-label" class="date-picker__month-label">
+            {{ monthLabel() }}
+          </h3>
+
+          <button
+            class="date-picker__nav-button"
+            type="button"
+            aria-label="Next month"
+            (click)="nextMonth()"
+          >
+            ›
+          </button>
+        </div>
+
+        <div
+          class="date-picker__grid"
+          role="grid"
+          aria-labelledby="date-picker-month-label"
+        >
+          @for (label of weekdayLabels; track label) {
+            <div class="date-picker__weekday" role="columnheader">
+              {{ label }}
+            </div>
+          }
+
+          @for (day of calendarDays(); track trackByDate($index, day)) {
+            <button
+              class="date-picker__day"
+              [class.date-picker__day--outside]="!day.isCurrentMonth"
+              [class.date-picker__day--today]="day.isToday"
+              [class.date-picker__day--selected]="day.isSelected"
+              [class.date-picker__day--focused]="day.isFocused"
+              type="button"
+              role="gridcell"
+              [attr.aria-selected]="day.isSelected"
+              [attr.aria-label]="formatAriaLabel(day.date)"
+              [attr.tabindex]="day.isFocused ? 0 : -1"
+              (click)="selectDate(day.date)"
+              (focus)="setFocusedDate(day.date)"
+              (keydown)="onDayKeydown($event)"
+            >
+              {{ day.dayNumber }}
+            </button>
+          }
+        </div>
+
+        <div class="date-picker__footer">
+          <button
+            class="date-picker__footer-button"
+            type="button"
+            (click)="selectToday()"
+          >
+            Today
+          </button>
+
+          <button
+            class="date-picker__footer-button"
+            type="button"
+            (click)="closeCalendar()"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
