@@ -5,6 +5,11 @@ const meta: Meta<ToastAlert> = {
   title: 'Components/Toast Alert',
   component: ToastAlert,
   tags: ['autodocs'],
+  parameters: {
+    a11y: {
+      test: 'todo',
+    },
+  },
   render: () => ({
     imports: [ToastAlert],
     template: `

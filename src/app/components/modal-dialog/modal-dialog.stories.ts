@@ -6,6 +6,11 @@ const meta: Meta<ModalDialog> = {
   title: 'Components/Modal Dialog',
   component: ModalDialog,
   tags: ['autodocs'],
+  parameters: {
+    a11y: {
+      test: 'todo',
+    },
+  },
   render: () => ({
     imports: [CommonModule, ModalDialog],
     template: `

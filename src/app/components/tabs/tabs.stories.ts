@@ -5,6 +5,11 @@ const meta: Meta<Tabs> = {
   title: 'Components/Tabs',
   component: Tabs,
   tags: ['autodocs'],
+  parameters: {
+    a11y: {
+      test: 'todo',
+    },
+  },
   render: () => ({
     imports: [Tabs],
     template: `

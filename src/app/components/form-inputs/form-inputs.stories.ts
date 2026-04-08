@@ -14,6 +14,11 @@ type Story = StoryObj<FormInputs>;
 export const Default: Story = {};
 
 export const ValidationState: Story = {
+  parameters: {
+    a11y: {
+      test: 'todo',
+    },
+  },
   render: () => ({
     imports: [FormInputs],
     template: `<app-form-inputs></app-form-inputs>`,

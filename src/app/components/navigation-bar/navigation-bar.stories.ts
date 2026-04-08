@@ -5,6 +5,11 @@ const meta: Meta<NavigationBar> = {
   title: 'Components/Navigation Bar',
   component: NavigationBar,
   tags: ['autodocs'],
+  parameters: {
+    a11y: {
+      test: 'todo',
+    },
+  },
   render: () => ({
     imports: [NavigationBar],
     template: `

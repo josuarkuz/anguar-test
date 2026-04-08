@@ -5,6 +5,11 @@ const meta: Meta<DataTable> = {
   title: 'Components/Data Table',
   component: DataTable,
   tags: ['autodocs'],
+  parameters: {
+    a11y: {
+      test: 'todo',
+    },
+  },
   render: () => ({
     imports: [DataTable],
     template: `

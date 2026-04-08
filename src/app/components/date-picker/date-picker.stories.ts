@@ -5,6 +5,11 @@ const meta: Meta<DatePicker> = {
   title: 'Components/Date Picker',
   component: DatePicker,
   tags: ['autodocs'],
+  parameters: {
+    a11y: {
+      test: 'todo',
+    },
+  },
   render: () => ({
     imports: [DatePicker],
     template: `

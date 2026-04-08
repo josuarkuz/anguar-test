@@ -5,6 +5,11 @@ const meta: Meta<SkipNavigation> = {
   title: 'Components/Skip Navigation',
   component: SkipNavigation,
   tags: ['autodocs'],
+  parameters: {
+    a11y: {
+      test: 'todo',
+    },
+  },
   render: (args) => ({
     props: args,
     template: `

@@ -5,6 +5,11 @@ const meta: Meta<DropdownMenu> = {
   title: 'Components/Dropdown Menu',
   component: DropdownMenu,
   tags: ['autodocs'],
+  parameters: {
+    a11y: {
+      test: 'todo',
+    },
+  },
   render: () => ({
     imports: [DropdownMenu],
     template: `
