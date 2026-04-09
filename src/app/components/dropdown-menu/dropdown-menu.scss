@@ -84,7 +84,21 @@
 
 .dropdown-menu__caret,
 .dropdown-menu__check {
-  color: var(--color-text-muted);
+  color: var(--color-text);
+}
+
+.dropdown-menu__caret {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.dropdown-menu__caret-icon {
+  width: 1rem;
+  height: 1rem;
+  display: block;
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {

@@ -22,9 +22,9 @@
             (click)="sortBy('name')"
           >
             <span>Name</span>
-            <span class="data-table__sort-indicator" aria-hidden="true">
-                {{ getSortIndicator('name') }}
-              </span>
+            <span class="data-table__sort-indicator">
+              <app-sort-indicator [state]="getSortIndicator('name')" />
+            </span>
           </button>
         </th>
 
@@ -36,9 +36,9 @@
             (click)="sortBy('role')"
           >
             <span>Role</span>
-            <span class="data-table__sort-indicator" aria-hidden="true">
-                {{ getSortIndicator('role') }}
-              </span>
+            <span class="data-table__sort-indicator">
+              <app-sort-indicator [state]="getSortIndicator('role')" />
+            </span>
           </button>
         </th>
 
@@ -50,9 +50,9 @@
             (click)="sortBy('team')"
           >
             <span>Team</span>
-            <span class="data-table__sort-indicator" aria-hidden="true">
-                {{ getSortIndicator('team') }}
-              </span>
+            <span class="data-table__sort-indicator">
+              <app-sort-indicator [state]="getSortIndicator('team')" />
+            </span>
           </button>
         </th>
 
@@ -64,9 +64,9 @@
             (click)="sortBy('status')"
           >
             <span>Status</span>
-            <span class="data-table__sort-indicator" aria-hidden="true">
-                {{ getSortIndicator('status') }}
-              </span>
+            <span class="data-table__sort-indicator">
+              <app-sort-indicator [state]="getSortIndicator('status')" />
+            </span>
           </button>
         </th>
       </tr>

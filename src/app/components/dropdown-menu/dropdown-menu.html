@@ -23,7 +23,22 @@
           (keydown)="onSingleButtonKeydown($event)"
         >
           <span>{{ selectedSingleLabel }}</span>
-          <span class="dropdown-menu__caret" aria-hidden="true">▾</span>
+          <span class="dropdown-menu__caret" aria-hidden="true">
+            <svg
+              class="dropdown-menu__caret-icon"
+              viewBox="0 0 24 24"
+              focusable="false"
+            >
+              <path
+                d="M6 9l6 6 6-6"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
         </button>
 
         @if (singleOpen()) {
@@ -68,7 +83,22 @@
           (keydown)="onMultiButtonKeydown($event)"
         >
           <span>{{ selectedMultiLabel }}</span>
-          <span class="dropdown-menu__caret" aria-hidden="true">▾</span>
+          <span class="dropdown-menu__caret" aria-hidden="true">
+            <svg
+              class="dropdown-menu__caret-icon"
+              viewBox="0 0 24 24"
+              focusable="false"
+            >
+              <path
+                d="M6 9l6 6 6-6"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
         </button>
 
         @if (multiOpen()) {

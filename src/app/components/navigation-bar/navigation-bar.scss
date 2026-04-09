@@ -104,7 +104,23 @@
 
 .navigation-bar__caret {
   font-size: 0.85rem;
+  color: var(--color-text);
 }
+
+.navigation-bar__caret {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.navigation-bar__caret-icon {
+  width: 1rem;
+  height: 1rem;
+  display: block;
+  flex-shrink: 0;
+}
+
 
 .navigation-bar__mobile-toggle {
   display: none;

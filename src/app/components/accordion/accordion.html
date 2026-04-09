@@ -19,8 +19,34 @@
             (click)="toggleItem(i)"
           >
             <span>{{ item.title }}</span>
+
             <span class="accordion__icon" aria-hidden="true">
-              {{ isOpen(i) ? '−' : '+' }}
+              <svg viewBox="0 0 24 24" class="accordion__icon-svg">
+                <path
+                  *ngIf="isOpen(i)"
+                  d="M5 12h14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+                <ng-container *ngIf="!isOpen(i)">
+                  <path
+                    d="M5 12h14"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M12 5v14"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </ng-container>
+              </svg>
             </span>
           </button>
         </h3>

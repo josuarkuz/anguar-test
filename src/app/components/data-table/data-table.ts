@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
+import { SortIndicatorComponent } from '../sort-indicator/sort-indicator';
 
 type SortDirection = 'asc' | 'desc';
 
@@ -13,10 +14,12 @@ interface DataTableRow {
 
 type SortColumn = 'name' | 'role' | 'team' | 'status';
 
+type SortIndicator = 'unsorted' | 'asc' | 'desc';
+
 @Component({
   selector: 'app-data-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SortIndicatorComponent],
   templateUrl: './data-table.html',
   styleUrl: './data-table.scss',
 })
@@ -29,9 +32,21 @@ export class DataTable {
     { id: 3, name: 'Sofía Torres', role: 'Project Manager', team: 'Delivery', status: 'On Leave' },
     { id: 4, name: 'Luis Mendoza', role: 'Backend Developer', team: 'Platform', status: 'Active' },
     { id: 5, name: 'Elena Castro', role: 'UX Designer', team: 'Design', status: 'Active' },
-    { id: 6, name: 'Jorge Silva', role: 'DevOps Engineer', team: 'Infrastructure', status: 'Inactive' },
+    {
+      id: 6,
+      name: 'Jorge Silva',
+      role: 'DevOps Engineer',
+      team: 'Infrastructure',
+      status: 'Inactive',
+    },
     { id: 7, name: 'Camila Vega', role: 'Business Analyst', team: 'Delivery', status: 'Active' },
-    { id: 8, name: 'Diego Herrera', role: 'Frontend Developer', team: 'Accessibility', status: 'Active' },
+    {
+      id: 8,
+      name: 'Diego Herrera',
+      role: 'Frontend Developer',
+      team: 'Accessibility',
+      status: 'Active',
+    },
     { id: 9, name: 'Valeria Gómez', role: 'QA Engineer', team: 'Platform', status: 'Active' },
     { id: 10, name: 'Ricardo Díaz', role: 'Product Owner', team: 'Delivery', status: 'Active' },
     { id: 11, name: 'Fernanda Pérez', role: 'UI Developer', team: 'Design', status: 'Inactive' },
@@ -122,11 +137,11 @@ export class DataTable {
     return `Sort by ${label}, currently ${this.sortDirection() === 'asc' ? 'ascending' : 'descending'}, activate to sort ${nextDirection}`;
   }
 
-  getSortIndicator(column: SortColumn): string {
+  getSortIndicator(column: SortColumn): SortIndicator {
     if (this.sortColumn() !== column) {
-      return '↕';
+      return 'unsorted';
     }
 
-    return this.sortDirection() === 'asc' ? '↑' : '↓';
+    return this.sortDirection() === 'asc' ? 'asc' : 'desc';
   }
 }
