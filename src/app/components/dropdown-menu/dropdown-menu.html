@@ -18,7 +18,7 @@
           type="button"
           aria-haspopup="listbox"
           [attr.aria-expanded]="singleOpen()"
-          aria-controls="single-menu-listbox"
+          [attr.aria-controls]="singleOpen() ? 'single-menu-listbox' : null"
           (click)="toggleSingleMenu()"
           (keydown)="onSingleButtonKeydown($event)"
         >
@@ -78,7 +78,7 @@
           type="button"
           aria-haspopup="listbox"
           [attr.aria-expanded]="multiOpen()"
-          aria-controls="multi-menu-listbox"
+          [attr.aria-controls]="multiOpen() ? 'multi-menu-listbox' : null"
           (click)="toggleMultiMenu()"
           (keydown)="onMultiButtonKeydown($event)"
         >

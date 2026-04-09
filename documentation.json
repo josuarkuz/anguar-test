@@ -123,12 +123,12 @@
         },
         {
             "name": "DataTableRow",
-            "id": "interface-DataTableRow-143566582ef46d345f4ae7d8f59e8b77fd6feb1b256fec18c532365467c4fe052478856ec180774736d45c0af46cf685cb19770bddd538b8afe36104ef4ac500",
+            "id": "interface-DataTableRow-34eda7c9d44b7c1b5973a3e21f8cbed9323a469036d3ac7e089a4efd34a4d4ae13d0dfc564ceb5ea652c4c83276b18b354f012e80a8424370b042e77b98c57ff",
             "file": "src/app/components/data-table/data-table.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { Component, computed, signal } from '@angular/core';\n\ntype SortDirection = 'asc' | 'desc';\n\ninterface DataTableRow {\n  id: number;\n  name: string;\n  role: string;\n  team: string;\n  status: string;\n}\n\ntype SortColumn = 'name' | 'role' | 'team' | 'status';\n\n@Component({\n  selector: 'app-data-table',\n  standalone: true,\n  imports: [CommonModule],\n  templateUrl: './data-table.html',\n  styleUrl: './data-table.scss',\n})\nexport class DataTable {\n  readonly pageSize = 5;\n\n  readonly rows = signal<DataTableRow[]>([\n    { id: 1, name: 'Ana López', role: 'Frontend Developer', team: 'Platform', status: 'Active' },\n    { id: 2, name: 'Marco Ruiz', role: 'QA Engineer', team: 'Accessibility', status: 'Active' },\n    { id: 3, name: 'Sofía Torres', role: 'Project Manager', team: 'Delivery', status: 'On Leave' },\n    { id: 4, name: 'Luis Mendoza', role: 'Backend Developer', team: 'Platform', status: 'Active' },\n    { id: 5, name: 'Elena Castro', role: 'UX Designer', team: 'Design', status: 'Active' },\n    { id: 6, name: 'Jorge Silva', role: 'DevOps Engineer', team: 'Infrastructure', status: 'Inactive' },\n    { id: 7, name: 'Camila Vega', role: 'Business Analyst', team: 'Delivery', status: 'Active' },\n    { id: 8, name: 'Diego Herrera', role: 'Frontend Developer', team: 'Accessibility', status: 'Active' },\n    { id: 9, name: 'Valeria Gómez', role: 'QA Engineer', team: 'Platform', status: 'Active' },\n    { id: 10, name: 'Ricardo Díaz', role: 'Product Owner', team: 'Delivery', status: 'Active' },\n    { id: 11, name: 'Fernanda Pérez', role: 'UI Developer', team: 'Design', status: 'Inactive' },\n    { id: 12, name: 'Gabriel Navarro', role: 'Scrum Master', team: 'Delivery', status: 'Active' },\n  ]);\n\n  readonly currentPage = signal(1);\n  readonly sortColumn = signal<SortColumn>('name');\n  readonly sortDirection = signal<SortDirection>('asc');\n\n  readonly totalPages = computed(() => {\n    return Math.ceil(this.rows().length / this.pageSize);\n  });\n\n  readonly sortedRows = computed(() => {\n    const column = this.sortColumn();\n    const direction = this.sortDirection();\n    const sorted = [...this.rows()].sort((a, b) => {\n      const valueA = a[column].toLowerCase();\n      const valueB = b[column].toLowerCase();\n\n      if (valueA < valueB) {\n        return direction === 'asc' ? -1 : 1;\n      }\n\n      if (valueA > valueB) {\n        return direction === 'asc' ? 1 : -1;\n      }\n\n      return 0;\n    });\n\n    return sorted;\n  });\n\n  readonly paginatedRows = computed(() => {\n    const start = (this.currentPage() - 1) * this.pageSize;\n    const end = start + this.pageSize;\n\n    return this.sortedRows().slice(start, end);\n  });\n\n  readonly pageStart = computed(() => {\n    return (this.currentPage() - 1) * this.pageSize + 1;\n  });\n\n  readonly pageEnd = computed(() => {\n    return Math.min(this.currentPage() * this.pageSize, this.rows().length);\n  });\n\n  sortBy(column: SortColumn): void {\n    if (this.sortColumn() === column) {\n      this.sortDirection.set(this.sortDirection() === 'asc' ? 'desc' : 'asc');\n    } else {\n      this.sortColumn.set(column);\n      this.sortDirection.set('asc');\n    }\n\n    this.currentPage.set(1);\n  }\n\n  previousPage(): void {\n    if (this.currentPage() > 1) {\n      this.currentPage.update((page) => page - 1);\n    }\n  }\n\n  nextPage(): void {\n    if (this.currentPage() < this.totalPages()) {\n      this.currentPage.update((page) => page + 1);\n    }\n  }\n\n  getAriaSort(column: SortColumn): 'ascending' | 'descending' | 'none' {\n    if (this.sortColumn() !== column) {\n      return 'none';\n    }\n\n    return this.sortDirection() === 'asc' ? 'ascending' : 'descending';\n  }\n\n  getSortLabel(column: SortColumn, label: string): string {\n    if (this.sortColumn() !== column) {\n      return `Sort by ${label}`;\n    }\n\n    const nextDirection = this.sortDirection() === 'asc' ? 'descending' : 'ascending';\n    return `Sort by ${label}, currently ${this.sortDirection() === 'asc' ? 'ascending' : 'descending'}, activate to sort ${nextDirection}`;\n  }\n\n  getSortIndicator(column: SortColumn): string {\n    if (this.sortColumn() !== column) {\n      return '↕';\n    }\n\n    return this.sortDirection() === 'asc' ? '↑' : '↓';\n  }\n}\n",
+            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { Component, computed, signal } from '@angular/core';\nimport { SortIndicatorComponent } from '../sort-indicator/sort-indicator';\n\ntype SortDirection = 'asc' | 'desc';\n\ninterface DataTableRow {\n  id: number;\n  name: string;\n  role: string;\n  team: string;\n  status: string;\n}\n\ntype SortColumn = 'name' | 'role' | 'team' | 'status';\n\ntype SortIndicator = 'unsorted' | 'asc' | 'desc';\n\n@Component({\n  selector: 'app-data-table',\n  standalone: true,\n  imports: [CommonModule, SortIndicatorComponent],\n  templateUrl: './data-table.html',\n  styleUrl: './data-table.scss',\n})\nexport class DataTable {\n  readonly pageSize = 5;\n\n  readonly rows = signal<DataTableRow[]>([\n    { id: 1, name: 'Ana López', role: 'Frontend Developer', team: 'Platform', status: 'Active' },\n    { id: 2, name: 'Marco Ruiz', role: 'QA Engineer', team: 'Accessibility', status: 'Active' },\n    { id: 3, name: 'Sofía Torres', role: 'Project Manager', team: 'Delivery', status: 'On Leave' },\n    { id: 4, name: 'Luis Mendoza', role: 'Backend Developer', team: 'Platform', status: 'Active' },\n    { id: 5, name: 'Elena Castro', role: 'UX Designer', team: 'Design', status: 'Active' },\n    {\n      id: 6,\n      name: 'Jorge Silva',\n      role: 'DevOps Engineer',\n      team: 'Infrastructure',\n      status: 'Inactive',\n    },\n    { id: 7, name: 'Camila Vega', role: 'Business Analyst', team: 'Delivery', status: 'Active' },\n    {\n      id: 8,\n      name: 'Diego Herrera',\n      role: 'Frontend Developer',\n      team: 'Accessibility',\n      status: 'Active',\n    },\n    { id: 9, name: 'Valeria Gómez', role: 'QA Engineer', team: 'Platform', status: 'Active' },\n    { id: 10, name: 'Ricardo Díaz', role: 'Product Owner', team: 'Delivery', status: 'Active' },\n    { id: 11, name: 'Fernanda Pérez', role: 'UI Developer', team: 'Design', status: 'Inactive' },\n    { id: 12, name: 'Gabriel Navarro', role: 'Scrum Master', team: 'Delivery', status: 'Active' },\n  ]);\n\n  readonly currentPage = signal(1);\n  readonly sortColumn = signal<SortColumn>('name');\n  readonly sortDirection = signal<SortDirection>('asc');\n\n  readonly totalPages = computed(() => {\n    return Math.ceil(this.rows().length / this.pageSize);\n  });\n\n  readonly sortedRows = computed(() => {\n    const column = this.sortColumn();\n    const direction = this.sortDirection();\n    const sorted = [...this.rows()].sort((a, b) => {\n      const valueA = a[column].toLowerCase();\n      const valueB = b[column].toLowerCase();\n\n      if (valueA < valueB) {\n        return direction === 'asc' ? -1 : 1;\n      }\n\n      if (valueA > valueB) {\n        return direction === 'asc' ? 1 : -1;\n      }\n\n      return 0;\n    });\n\n    return sorted;\n  });\n\n  readonly paginatedRows = computed(() => {\n    const start = (this.currentPage() - 1) * this.pageSize;\n    const end = start + this.pageSize;\n\n    return this.sortedRows().slice(start, end);\n  });\n\n  readonly pageStart = computed(() => {\n    return (this.currentPage() - 1) * this.pageSize + 1;\n  });\n\n  readonly pageEnd = computed(() => {\n    return Math.min(this.currentPage() * this.pageSize, this.rows().length);\n  });\n\n  sortBy(column: SortColumn): void {\n    if (this.sortColumn() === column) {\n      this.sortDirection.set(this.sortDirection() === 'asc' ? 'desc' : 'asc');\n    } else {\n      this.sortColumn.set(column);\n      this.sortDirection.set('asc');\n    }\n\n    this.currentPage.set(1);\n  }\n\n  previousPage(): void {\n    if (this.currentPage() > 1) {\n      this.currentPage.update((page) => page - 1);\n    }\n  }\n\n  nextPage(): void {\n    if (this.currentPage() < this.totalPages()) {\n      this.currentPage.update((page) => page + 1);\n    }\n  }\n\n  getAriaSort(column: SortColumn): 'ascending' | 'descending' | 'none' {\n    if (this.sortColumn() !== column) {\n      return 'none';\n    }\n\n    return this.sortDirection() === 'asc' ? 'ascending' : 'descending';\n  }\n\n  getSortLabel(column: SortColumn, label: string): string {\n    if (this.sortColumn() !== column) {\n      return `Sort by ${label}`;\n    }\n\n    const nextDirection = this.sortDirection() === 'asc' ? 'descending' : 'ascending';\n    return `Sort by ${label}, currently ${this.sortDirection() === 'asc' ? 'ascending' : 'descending'}, activate to sort ${nextDirection}`;\n  }\n\n  getSortIndicator(column: SortColumn): SortIndicator {\n    if (this.sortColumn() !== column) {\n      return 'unsorted';\n    }\n\n    return this.sortDirection() === 'asc' ? 'asc' : 'desc';\n  }\n}\n",
             "properties": [
                 {
                     "name": "id",
@@ -138,7 +138,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 7
+                    "line": 8
                 },
                 {
                     "name": "name",
@@ -148,7 +148,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 8
+                    "line": 9
                 },
                 {
                     "name": "role",
@@ -158,7 +158,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 9
+                    "line": 10
                 },
                 {
                     "name": "status",
@@ -168,7 +168,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 11
+                    "line": 12
                 },
                 {
                     "name": "team",
@@ -178,7 +178,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 10
+                    "line": 11
                 }
             ],
             "indexSignatures": [],
@@ -674,7 +674,7 @@
             "styleUrlsData": "",
             "stylesData": "",
             "extends": [],
-            "templateData": "<div class=\"accordion\">\n  <div class=\"accordion__header\">\n    <h2 class=\"accordion__title\">Accordion</h2>\n    <p class=\"accordion__description\">\n      Accessible expandable sections with semantic buttons and ARIA state.\n    </p>\n  </div>\n\n  <div class=\"accordion__items\">\n    @for (item of items; track item.id; let i = $index) {\n      <section class=\"accordion__item\">\n        <h3 class=\"accordion__item-heading\">\n          <button\n            class=\"accordion__trigger\"\n            type=\"button\"\n            [id]=\"getHeaderId(i)\"\n            [attr.aria-expanded]=\"isOpen(i)\"\n            [attr.aria-controls]=\"getPanelId(i)\"\n            (click)=\"toggleItem(i)\"\n          >\n            <span>{{ item.title }}</span>\n            <span class=\"accordion__icon\" aria-hidden=\"true\">\n              {{ isOpen(i) ? '−' : '+' }}\n            </span>\n          </button>\n        </h3>\n\n        @if (isOpen(i)) {\n          <div\n            class=\"accordion__panel\"\n            role=\"region\"\n            [id]=\"getPanelId(i)\"\n            [attr.aria-labelledby]=\"getHeaderId(i)\"\n          >\n            <p>{{ item.content }}</p>\n          </div>\n        }\n      </section>\n    }\n  </div>\n</div>\n"
+            "templateData": "<div class=\"accordion\">\n  <div class=\"accordion__header\">\n    <h2 class=\"accordion__title\">Accordion</h2>\n    <p class=\"accordion__description\">\n      Accessible expandable sections with semantic buttons and ARIA state.\n    </p>\n  </div>\n\n  <div class=\"accordion__items\">\n    @for (item of items; track item.id; let i = $index) {\n      <section class=\"accordion__item\">\n        <h3 class=\"accordion__item-heading\">\n          <button\n            class=\"accordion__trigger\"\n            type=\"button\"\n            [id]=\"getHeaderId(i)\"\n            [attr.aria-expanded]=\"isOpen(i)\"\n            [attr.aria-controls]=\"getPanelId(i)\"\n            (click)=\"toggleItem(i)\"\n          >\n            <span>{{ item.title }}</span>\n\n            <span class=\"accordion__icon\" aria-hidden=\"true\">\n              <svg viewBox=\"0 0 24 24\" class=\"accordion__icon-svg\">\n                <path\n                  *ngIf=\"isOpen(i)\"\n                  d=\"M5 12h14\"\n                  fill=\"none\"\n                  stroke=\"currentColor\"\n                  stroke-width=\"2\"\n                  stroke-linecap=\"round\"\n                />\n                <ng-container *ngIf=\"!isOpen(i)\">\n                  <path\n                    d=\"M5 12h14\"\n                    fill=\"none\"\n                    stroke=\"currentColor\"\n                    stroke-width=\"2\"\n                    stroke-linecap=\"round\"\n                  />\n                  <path\n                    d=\"M12 5v14\"\n                    fill=\"none\"\n                    stroke=\"currentColor\"\n                    stroke-width=\"2\"\n                    stroke-linecap=\"round\"\n                  />\n                </ng-container>\n              </svg>\n            </span>\n          </button>\n        </h3>\n\n        @if (isOpen(i)) {\n          <div\n            class=\"accordion__panel\"\n            role=\"region\"\n            [id]=\"getPanelId(i)\"\n            [attr.aria-labelledby]=\"getHeaderId(i)\"\n          >\n            <p>{{ item.content }}</p>\n          </div>\n        }\n      </section>\n    }\n  </div>\n</div>\n"
         },
         {
             "name": "App",
@@ -964,7 +964,7 @@
         },
         {
             "name": "DataTable",
-            "id": "component-DataTable-143566582ef46d345f4ae7d8f59e8b77fd6feb1b256fec18c532365467c4fe052478856ec180774736d45c0af46cf685cb19770bddd538b8afe36104ef4ac500",
+            "id": "component-DataTable-34eda7c9d44b7c1b5973a3e21f8cbed9323a469036d3ac7e089a4efd34a4d4ae13d0dfc564ceb5ea652c4c83276b18b354f012e80a8424370b042e77b98c57ff",
             "file": "src/app/components/data-table/data-table.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -991,7 +991,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 41,
+                    "line": 56,
                     "modifierKind": [
                         148
                     ]
@@ -1005,7 +1005,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 81,
+                    "line": 96,
                     "modifierKind": [
                         148
                     ]
@@ -1019,7 +1019,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 24,
+                    "line": 27,
                     "modifierKind": [
                         148
                     ]
@@ -1033,7 +1033,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 77,
+                    "line": 92,
                     "modifierKind": [
                         148
                     ]
@@ -1047,21 +1047,21 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 70,
+                    "line": 85,
                     "modifierKind": [
                         148
                     ]
                 },
                 {
                     "name": "rows",
-                    "defaultValue": "signal<DataTableRow[]>([\n    { id: 1, name: 'Ana López', role: 'Frontend Developer', team: 'Platform', status: 'Active' },\n    { id: 2, name: 'Marco Ruiz', role: 'QA Engineer', team: 'Accessibility', status: 'Active' },\n    { id: 3, name: 'Sofía Torres', role: 'Project Manager', team: 'Delivery', status: 'On Leave' },\n    { id: 4, name: 'Luis Mendoza', role: 'Backend Developer', team: 'Platform', status: 'Active' },\n    { id: 5, name: 'Elena Castro', role: 'UX Designer', team: 'Design', status: 'Active' },\n    { id: 6, name: 'Jorge Silva', role: 'DevOps Engineer', team: 'Infrastructure', status: 'Inactive' },\n    { id: 7, name: 'Camila Vega', role: 'Business Analyst', team: 'Delivery', status: 'Active' },\n    { id: 8, name: 'Diego Herrera', role: 'Frontend Developer', team: 'Accessibility', status: 'Active' },\n    { id: 9, name: 'Valeria Gómez', role: 'QA Engineer', team: 'Platform', status: 'Active' },\n    { id: 10, name: 'Ricardo Díaz', role: 'Product Owner', team: 'Delivery', status: 'Active' },\n    { id: 11, name: 'Fernanda Pérez', role: 'UI Developer', team: 'Design', status: 'Inactive' },\n    { id: 12, name: 'Gabriel Navarro', role: 'Scrum Master', team: 'Delivery', status: 'Active' },\n  ])",
+                    "defaultValue": "signal<DataTableRow[]>([\n    { id: 1, name: 'Ana López', role: 'Frontend Developer', team: 'Platform', status: 'Active' },\n    { id: 2, name: 'Marco Ruiz', role: 'QA Engineer', team: 'Accessibility', status: 'Active' },\n    { id: 3, name: 'Sofía Torres', role: 'Project Manager', team: 'Delivery', status: 'On Leave' },\n    { id: 4, name: 'Luis Mendoza', role: 'Backend Developer', team: 'Platform', status: 'Active' },\n    { id: 5, name: 'Elena Castro', role: 'UX Designer', team: 'Design', status: 'Active' },\n    {\n      id: 6,\n      name: 'Jorge Silva',\n      role: 'DevOps Engineer',\n      team: 'Infrastructure',\n      status: 'Inactive',\n    },\n    { id: 7, name: 'Camila Vega', role: 'Business Analyst', team: 'Delivery', status: 'Active' },\n    {\n      id: 8,\n      name: 'Diego Herrera',\n      role: 'Frontend Developer',\n      team: 'Accessibility',\n      status: 'Active',\n    },\n    { id: 9, name: 'Valeria Gómez', role: 'QA Engineer', team: 'Platform', status: 'Active' },\n    { id: 10, name: 'Ricardo Díaz', role: 'Product Owner', team: 'Delivery', status: 'Active' },\n    { id: 11, name: 'Fernanda Pérez', role: 'UI Developer', team: 'Design', status: 'Inactive' },\n    { id: 12, name: 'Gabriel Navarro', role: 'Scrum Master', team: 'Delivery', status: 'Active' },\n  ])",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "unknown",
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 26,
+                    "line": 29,
                     "modifierKind": [
                         148
                     ]
@@ -1075,7 +1075,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 42,
+                    "line": 57,
                     "modifierKind": [
                         148
                     ]
@@ -1089,7 +1089,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 43,
+                    "line": 58,
                     "modifierKind": [
                         148
                     ]
@@ -1103,7 +1103,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 49,
+                    "line": 64,
                     "modifierKind": [
                         148
                     ]
@@ -1117,7 +1117,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 45,
+                    "line": 60,
                     "modifierKind": [
                         148
                     ]
@@ -1139,7 +1139,7 @@
                     "optional": false,
                     "returnType": "\"ascending\" | \"descending\" | \"none\"",
                     "typeParameters": [],
-                    "line": 108,
+                    "line": 123,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -1169,9 +1169,9 @@
                         }
                     ],
                     "optional": false,
-                    "returnType": "string",
+                    "returnType": "SortIndicator",
                     "typeParameters": [],
-                    "line": 125,
+                    "line": 140,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -1211,7 +1211,7 @@
                     "optional": false,
                     "returnType": "string",
                     "typeParameters": [],
-                    "line": 116,
+                    "line": 131,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -1245,7 +1245,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 102,
+                    "line": 117,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -1255,7 +1255,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 96,
+                    "line": 111,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -1274,7 +1274,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 85,
+                    "line": 100,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -1301,18 +1301,22 @@
                 {
                     "name": "CommonModule",
                     "type": "module"
+                },
+                {
+                    "name": "SortIndicatorComponent",
+                    "type": "component"
                 }
             ],
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { Component, computed, signal } from '@angular/core';\n\ntype SortDirection = 'asc' | 'desc';\n\ninterface DataTableRow {\n  id: number;\n  name: string;\n  role: string;\n  team: string;\n  status: string;\n}\n\ntype SortColumn = 'name' | 'role' | 'team' | 'status';\n\n@Component({\n  selector: 'app-data-table',\n  standalone: true,\n  imports: [CommonModule],\n  templateUrl: './data-table.html',\n  styleUrl: './data-table.scss',\n})\nexport class DataTable {\n  readonly pageSize = 5;\n\n  readonly rows = signal<DataTableRow[]>([\n    { id: 1, name: 'Ana López', role: 'Frontend Developer', team: 'Platform', status: 'Active' },\n    { id: 2, name: 'Marco Ruiz', role: 'QA Engineer', team: 'Accessibility', status: 'Active' },\n    { id: 3, name: 'Sofía Torres', role: 'Project Manager', team: 'Delivery', status: 'On Leave' },\n    { id: 4, name: 'Luis Mendoza', role: 'Backend Developer', team: 'Platform', status: 'Active' },\n    { id: 5, name: 'Elena Castro', role: 'UX Designer', team: 'Design', status: 'Active' },\n    { id: 6, name: 'Jorge Silva', role: 'DevOps Engineer', team: 'Infrastructure', status: 'Inactive' },\n    { id: 7, name: 'Camila Vega', role: 'Business Analyst', team: 'Delivery', status: 'Active' },\n    { id: 8, name: 'Diego Herrera', role: 'Frontend Developer', team: 'Accessibility', status: 'Active' },\n    { id: 9, name: 'Valeria Gómez', role: 'QA Engineer', team: 'Platform', status: 'Active' },\n    { id: 10, name: 'Ricardo Díaz', role: 'Product Owner', team: 'Delivery', status: 'Active' },\n    { id: 11, name: 'Fernanda Pérez', role: 'UI Developer', team: 'Design', status: 'Inactive' },\n    { id: 12, name: 'Gabriel Navarro', role: 'Scrum Master', team: 'Delivery', status: 'Active' },\n  ]);\n\n  readonly currentPage = signal(1);\n  readonly sortColumn = signal<SortColumn>('name');\n  readonly sortDirection = signal<SortDirection>('asc');\n\n  readonly totalPages = computed(() => {\n    return Math.ceil(this.rows().length / this.pageSize);\n  });\n\n  readonly sortedRows = computed(() => {\n    const column = this.sortColumn();\n    const direction = this.sortDirection();\n    const sorted = [...this.rows()].sort((a, b) => {\n      const valueA = a[column].toLowerCase();\n      const valueB = b[column].toLowerCase();\n\n      if (valueA < valueB) {\n        return direction === 'asc' ? -1 : 1;\n      }\n\n      if (valueA > valueB) {\n        return direction === 'asc' ? 1 : -1;\n      }\n\n      return 0;\n    });\n\n    return sorted;\n  });\n\n  readonly paginatedRows = computed(() => {\n    const start = (this.currentPage() - 1) * this.pageSize;\n    const end = start + this.pageSize;\n\n    return this.sortedRows().slice(start, end);\n  });\n\n  readonly pageStart = computed(() => {\n    return (this.currentPage() - 1) * this.pageSize + 1;\n  });\n\n  readonly pageEnd = computed(() => {\n    return Math.min(this.currentPage() * this.pageSize, this.rows().length);\n  });\n\n  sortBy(column: SortColumn): void {\n    if (this.sortColumn() === column) {\n      this.sortDirection.set(this.sortDirection() === 'asc' ? 'desc' : 'asc');\n    } else {\n      this.sortColumn.set(column);\n      this.sortDirection.set('asc');\n    }\n\n    this.currentPage.set(1);\n  }\n\n  previousPage(): void {\n    if (this.currentPage() > 1) {\n      this.currentPage.update((page) => page - 1);\n    }\n  }\n\n  nextPage(): void {\n    if (this.currentPage() < this.totalPages()) {\n      this.currentPage.update((page) => page + 1);\n    }\n  }\n\n  getAriaSort(column: SortColumn): 'ascending' | 'descending' | 'none' {\n    if (this.sortColumn() !== column) {\n      return 'none';\n    }\n\n    return this.sortDirection() === 'asc' ? 'ascending' : 'descending';\n  }\n\n  getSortLabel(column: SortColumn, label: string): string {\n    if (this.sortColumn() !== column) {\n      return `Sort by ${label}`;\n    }\n\n    const nextDirection = this.sortDirection() === 'asc' ? 'descending' : 'ascending';\n    return `Sort by ${label}, currently ${this.sortDirection() === 'asc' ? 'ascending' : 'descending'}, activate to sort ${nextDirection}`;\n  }\n\n  getSortIndicator(column: SortColumn): string {\n    if (this.sortColumn() !== column) {\n      return '↕';\n    }\n\n    return this.sortDirection() === 'asc' ? '↑' : '↓';\n  }\n}\n",
+            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { Component, computed, signal } from '@angular/core';\nimport { SortIndicatorComponent } from '../sort-indicator/sort-indicator';\n\ntype SortDirection = 'asc' | 'desc';\n\ninterface DataTableRow {\n  id: number;\n  name: string;\n  role: string;\n  team: string;\n  status: string;\n}\n\ntype SortColumn = 'name' | 'role' | 'team' | 'status';\n\ntype SortIndicator = 'unsorted' | 'asc' | 'desc';\n\n@Component({\n  selector: 'app-data-table',\n  standalone: true,\n  imports: [CommonModule, SortIndicatorComponent],\n  templateUrl: './data-table.html',\n  styleUrl: './data-table.scss',\n})\nexport class DataTable {\n  readonly pageSize = 5;\n\n  readonly rows = signal<DataTableRow[]>([\n    { id: 1, name: 'Ana López', role: 'Frontend Developer', team: 'Platform', status: 'Active' },\n    { id: 2, name: 'Marco Ruiz', role: 'QA Engineer', team: 'Accessibility', status: 'Active' },\n    { id: 3, name: 'Sofía Torres', role: 'Project Manager', team: 'Delivery', status: 'On Leave' },\n    { id: 4, name: 'Luis Mendoza', role: 'Backend Developer', team: 'Platform', status: 'Active' },\n    { id: 5, name: 'Elena Castro', role: 'UX Designer', team: 'Design', status: 'Active' },\n    {\n      id: 6,\n      name: 'Jorge Silva',\n      role: 'DevOps Engineer',\n      team: 'Infrastructure',\n      status: 'Inactive',\n    },\n    { id: 7, name: 'Camila Vega', role: 'Business Analyst', team: 'Delivery', status: 'Active' },\n    {\n      id: 8,\n      name: 'Diego Herrera',\n      role: 'Frontend Developer',\n      team: 'Accessibility',\n      status: 'Active',\n    },\n    { id: 9, name: 'Valeria Gómez', role: 'QA Engineer', team: 'Platform', status: 'Active' },\n    { id: 10, name: 'Ricardo Díaz', role: 'Product Owner', team: 'Delivery', status: 'Active' },\n    { id: 11, name: 'Fernanda Pérez', role: 'UI Developer', team: 'Design', status: 'Inactive' },\n    { id: 12, name: 'Gabriel Navarro', role: 'Scrum Master', team: 'Delivery', status: 'Active' },\n  ]);\n\n  readonly currentPage = signal(1);\n  readonly sortColumn = signal<SortColumn>('name');\n  readonly sortDirection = signal<SortDirection>('asc');\n\n  readonly totalPages = computed(() => {\n    return Math.ceil(this.rows().length / this.pageSize);\n  });\n\n  readonly sortedRows = computed(() => {\n    const column = this.sortColumn();\n    const direction = this.sortDirection();\n    const sorted = [...this.rows()].sort((a, b) => {\n      const valueA = a[column].toLowerCase();\n      const valueB = b[column].toLowerCase();\n\n      if (valueA < valueB) {\n        return direction === 'asc' ? -1 : 1;\n      }\n\n      if (valueA > valueB) {\n        return direction === 'asc' ? 1 : -1;\n      }\n\n      return 0;\n    });\n\n    return sorted;\n  });\n\n  readonly paginatedRows = computed(() => {\n    const start = (this.currentPage() - 1) * this.pageSize;\n    const end = start + this.pageSize;\n\n    return this.sortedRows().slice(start, end);\n  });\n\n  readonly pageStart = computed(() => {\n    return (this.currentPage() - 1) * this.pageSize + 1;\n  });\n\n  readonly pageEnd = computed(() => {\n    return Math.min(this.currentPage() * this.pageSize, this.rows().length);\n  });\n\n  sortBy(column: SortColumn): void {\n    if (this.sortColumn() === column) {\n      this.sortDirection.set(this.sortDirection() === 'asc' ? 'desc' : 'asc');\n    } else {\n      this.sortColumn.set(column);\n      this.sortDirection.set('asc');\n    }\n\n    this.currentPage.set(1);\n  }\n\n  previousPage(): void {\n    if (this.currentPage() > 1) {\n      this.currentPage.update((page) => page - 1);\n    }\n  }\n\n  nextPage(): void {\n    if (this.currentPage() < this.totalPages()) {\n      this.currentPage.update((page) => page + 1);\n    }\n  }\n\n  getAriaSort(column: SortColumn): 'ascending' | 'descending' | 'none' {\n    if (this.sortColumn() !== column) {\n      return 'none';\n    }\n\n    return this.sortDirection() === 'asc' ? 'ascending' : 'descending';\n  }\n\n  getSortLabel(column: SortColumn, label: string): string {\n    if (this.sortColumn() !== column) {\n      return `Sort by ${label}`;\n    }\n\n    const nextDirection = this.sortDirection() === 'asc' ? 'descending' : 'ascending';\n    return `Sort by ${label}, currently ${this.sortDirection() === 'asc' ? 'ascending' : 'descending'}, activate to sort ${nextDirection}`;\n  }\n\n  getSortIndicator(column: SortColumn): SortIndicator {\n    if (this.sortColumn() !== column) {\n      return 'unsorted';\n    }\n\n    return this.sortDirection() === 'asc' ? 'asc' : 'desc';\n  }\n}\n",
             "styleUrl": "./data-table.scss",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
             "extends": [],
-            "templateData": "<div class=\"data-table\">\n  <div class=\"data-table__header\">\n    <h2 class=\"data-table__title\">Data Table</h2>\n    <p class=\"data-table__description\">\n      Sortable, paginated table with semantic headers and accessible controls.\n    </p>\n  </div>\n\n  <div class=\"data-table__table-wrapper\">\n    <table class=\"data-table__table\">\n      <caption class=\"visually-hidden\">\n        Team members table with sortable columns and pagination\n      </caption>\n\n      <thead>\n      <tr>\n        <th scope=\"col\" [attr.aria-sort]=\"getAriaSort('name')\">\n          <button\n            class=\"data-table__sort-button\"\n            type=\"button\"\n            [attr.aria-label]=\"getSortLabel('name', 'name')\"\n            (click)=\"sortBy('name')\"\n          >\n            <span>Name</span>\n            <span class=\"data-table__sort-indicator\" aria-hidden=\"true\">\n                {{ getSortIndicator('name') }}\n              </span>\n          </button>\n        </th>\n\n        <th scope=\"col\" [attr.aria-sort]=\"getAriaSort('role')\">\n          <button\n            class=\"data-table__sort-button\"\n            type=\"button\"\n            [attr.aria-label]=\"getSortLabel('role', 'role')\"\n            (click)=\"sortBy('role')\"\n          >\n            <span>Role</span>\n            <span class=\"data-table__sort-indicator\" aria-hidden=\"true\">\n                {{ getSortIndicator('role') }}\n              </span>\n          </button>\n        </th>\n\n        <th scope=\"col\" [attr.aria-sort]=\"getAriaSort('team')\">\n          <button\n            class=\"data-table__sort-button\"\n            type=\"button\"\n            [attr.aria-label]=\"getSortLabel('team', 'team')\"\n            (click)=\"sortBy('team')\"\n          >\n            <span>Team</span>\n            <span class=\"data-table__sort-indicator\" aria-hidden=\"true\">\n                {{ getSortIndicator('team') }}\n              </span>\n          </button>\n        </th>\n\n        <th scope=\"col\" [attr.aria-sort]=\"getAriaSort('status')\">\n          <button\n            class=\"data-table__sort-button\"\n            type=\"button\"\n            [attr.aria-label]=\"getSortLabel('status', 'status')\"\n            (click)=\"sortBy('status')\"\n          >\n            <span>Status</span>\n            <span class=\"data-table__sort-indicator\" aria-hidden=\"true\">\n                {{ getSortIndicator('status') }}\n              </span>\n          </button>\n        </th>\n      </tr>\n      </thead>\n\n      <tbody>\n        @for (row of paginatedRows(); track row.id) {\n          <tr>\n            <th scope=\"row\">{{ row.name }}</th>\n            <td>{{ row.role }}</td>\n            <td>{{ row.team }}</td>\n            <td>{{ row.status }}</td>\n          </tr>\n        }\n      </tbody>\n    </table>\n  </div>\n\n  <div class=\"data-table__footer\">\n    <p class=\"data-table__results\" aria-live=\"polite\">\n      Showing {{ pageStart() }} to {{ pageEnd() }} of {{ rows().length }} results\n    </p>\n\n    <div class=\"data-table__pagination\">\n      <button\n        class=\"data-table__pagination-button\"\n        type=\"button\"\n        [disabled]=\"currentPage() === 1\"\n        (click)=\"previousPage()\"\n      >\n        Previous\n      </button>\n\n      <span class=\"data-table__page-indicator\" aria-live=\"polite\">\n        Page {{ currentPage() }} of {{ totalPages() }}\n      </span>\n\n      <button\n        class=\"data-table__pagination-button\"\n        type=\"button\"\n        [disabled]=\"currentPage() === totalPages()\"\n        (click)=\"nextPage()\"\n      >\n        Next\n      </button>\n    </div>\n  </div>\n</div>\n"
+            "templateData": "<div class=\"data-table\">\n  <div class=\"data-table__header\">\n    <h2 class=\"data-table__title\">Data Table</h2>\n    <p class=\"data-table__description\">\n      Sortable, paginated table with semantic headers and accessible controls.\n    </p>\n  </div>\n\n  <div class=\"data-table__table-wrapper\">\n    <table class=\"data-table__table\">\n      <caption class=\"visually-hidden\">\n        Team members table with sortable columns and pagination\n      </caption>\n\n      <thead>\n      <tr>\n        <th scope=\"col\" [attr.aria-sort]=\"getAriaSort('name')\">\n          <button\n            class=\"data-table__sort-button\"\n            type=\"button\"\n            [attr.aria-label]=\"getSortLabel('name', 'name')\"\n            (click)=\"sortBy('name')\"\n          >\n            <span>Name</span>\n            <span class=\"data-table__sort-indicator\">\n              <app-sort-indicator [state]=\"getSortIndicator('name')\" />\n            </span>\n          </button>\n        </th>\n\n        <th scope=\"col\" [attr.aria-sort]=\"getAriaSort('role')\">\n          <button\n            class=\"data-table__sort-button\"\n            type=\"button\"\n            [attr.aria-label]=\"getSortLabel('role', 'role')\"\n            (click)=\"sortBy('role')\"\n          >\n            <span>Role</span>\n            <span class=\"data-table__sort-indicator\">\n              <app-sort-indicator [state]=\"getSortIndicator('role')\" />\n            </span>\n          </button>\n        </th>\n\n        <th scope=\"col\" [attr.aria-sort]=\"getAriaSort('team')\">\n          <button\n            class=\"data-table__sort-button\"\n            type=\"button\"\n            [attr.aria-label]=\"getSortLabel('team', 'team')\"\n            (click)=\"sortBy('team')\"\n          >\n            <span>Team</span>\n            <span class=\"data-table__sort-indicator\">\n              <app-sort-indicator [state]=\"getSortIndicator('team')\" />\n            </span>\n          </button>\n        </th>\n\n        <th scope=\"col\" [attr.aria-sort]=\"getAriaSort('status')\">\n          <button\n            class=\"data-table__sort-button\"\n            type=\"button\"\n            [attr.aria-label]=\"getSortLabel('status', 'status')\"\n            (click)=\"sortBy('status')\"\n          >\n            <span>Status</span>\n            <span class=\"data-table__sort-indicator\">\n              <app-sort-indicator [state]=\"getSortIndicator('status')\" />\n            </span>\n          </button>\n        </th>\n      </tr>\n      </thead>\n\n      <tbody>\n        @for (row of paginatedRows(); track row.id) {\n          <tr>\n            <th scope=\"row\">{{ row.name }}</th>\n            <td>{{ row.role }}</td>\n            <td>{{ row.team }}</td>\n            <td>{{ row.status }}</td>\n          </tr>\n        }\n      </tbody>\n    </table>\n  </div>\n\n  <div class=\"data-table__footer\">\n    <p class=\"data-table__results\" aria-live=\"polite\">\n      Showing {{ pageStart() }} to {{ pageEnd() }} of {{ rows().length }} results\n    </p>\n\n    <div class=\"data-table__pagination\">\n      <button\n        class=\"data-table__pagination-button\"\n        type=\"button\"\n        [disabled]=\"currentPage() === 1\"\n        (click)=\"previousPage()\"\n      >\n        Previous\n      </button>\n\n      <span class=\"data-table__page-indicator\" aria-live=\"polite\">\n        Page {{ currentPage() }} of {{ totalPages() }}\n      </span>\n\n      <button\n        class=\"data-table__pagination-button\"\n        type=\"button\"\n        [disabled]=\"currentPage() === totalPages()\"\n        (click)=\"nextPage()\"\n      >\n        Next\n      </button>\n    </div>\n  </div>\n</div>\n"
         },
         {
             "name": "DatePicker",
@@ -2568,7 +2572,7 @@
                     }
                 }
             },
-            "templateData": "<div class=\"dropdown-menu\">\n  <div class=\"dropdown-menu__header\">\n    <h2 class=\"dropdown-menu__title\">Dropdown Menu</h2>\n    <p class=\"dropdown-menu__description\">\n      Accessible single-select and multi-select dropdown menus with keyboard navigation.\n    </p>\n  </div>\n\n  <div class=\"dropdown-menu__grid\">\n    <section class=\"dropdown-menu__section\" aria-labelledby=\"single-select-title\">\n      <h3 id=\"single-select-title\" class=\"dropdown-menu__section-title\">Single Select</h3>\n\n      <div class=\"dropdown-menu__control\">\n        <button\n          #singleMenuButton\n          id=\"single-menu-button\"\n          class=\"dropdown-menu__trigger\"\n          type=\"button\"\n          aria-haspopup=\"listbox\"\n          [attr.aria-expanded]=\"singleOpen()\"\n          aria-controls=\"single-menu-listbox\"\n          (click)=\"toggleSingleMenu()\"\n          (keydown)=\"onSingleButtonKeydown($event)\"\n        >\n          <span>{{ selectedSingleLabel }}</span>\n          <span class=\"dropdown-menu__caret\" aria-hidden=\"true\">▾</span>\n        </button>\n\n        @if (singleOpen()) {\n          <ul\n            id=\"single-menu-listbox\"\n            class=\"dropdown-menu__listbox\"\n            role=\"listbox\"\n            aria-labelledby=\"single-menu-button\"\n          >\n            @for (option of singleOptions; track option.id; let i = $index) {\n              <li\n                class=\"dropdown-menu__option\"\n                [class.dropdown-menu__option--active]=\"activeSingleIndex() === i\"\n                [class.dropdown-menu__option--selected]=\"selectedSingle() === option.id\"\n                role=\"option\"\n                [attr.aria-selected]=\"selectedSingle() === option.id\"\n                tabindex=\"0\"\n                (click)=\"selectSingle(option.id)\"\n                (keydown)=\"onSingleOptionKeydown($event)\"\n              >\n                {{ option.label }}\n              </li>\n            }\n          </ul>\n        }\n      </div>\n    </section>\n\n    <section class=\"dropdown-menu__section\" aria-labelledby=\"multi-select-title\">\n      <h3 id=\"multi-select-title\" class=\"dropdown-menu__section-title\">Multi Select</h3>\n\n      <div class=\"dropdown-menu__control\">\n        <button\n          #multiMenuButton\n          id=\"multi-menu-button\"\n          class=\"dropdown-menu__trigger\"\n          type=\"button\"\n          aria-haspopup=\"listbox\"\n          [attr.aria-expanded]=\"multiOpen()\"\n          aria-controls=\"multi-menu-listbox\"\n          (click)=\"toggleMultiMenu()\"\n          (keydown)=\"onMultiButtonKeydown($event)\"\n        >\n          <span>{{ selectedMultiLabel }}</span>\n          <span class=\"dropdown-menu__caret\" aria-hidden=\"true\">▾</span>\n        </button>\n\n        @if (multiOpen()) {\n          <ul\n            id=\"multi-menu-listbox\"\n            class=\"dropdown-menu__listbox\"\n            role=\"listbox\"\n            aria-labelledby=\"multi-menu-button\"\n            aria-multiselectable=\"true\"\n          >\n            @for (option of multiOptions; track option.id; let i = $index) {\n              <li\n                class=\"dropdown-menu__option\"\n                [class.dropdown-menu__option--active]=\"activeMultiIndex() === i\"\n                [class.dropdown-menu__option--selected]=\"isMultiSelected(option.id)\"\n                role=\"option\"\n                [attr.aria-selected]=\"isMultiSelected(option.id)\"\n                tabindex=\"0\"\n                (click)=\"toggleMultiSelection(option.id)\"\n                (keydown)=\"onMultiOptionKeydown($event)\"\n              >\n                <span>{{ option.label }}</span>\n                @if (isMultiSelected(option.id)) {\n                  <span class=\"dropdown-menu__check\" aria-hidden=\"true\">✓</span>\n                }\n              </li>\n            }\n          </ul>\n        }\n      </div>\n    </section>\n  </div>\n</div>\n"
+            "templateData": "<div class=\"dropdown-menu\">\n  <div class=\"dropdown-menu__header\">\n    <h2 class=\"dropdown-menu__title\">Dropdown Menu</h2>\n    <p class=\"dropdown-menu__description\">\n      Accessible single-select and multi-select dropdown menus with keyboard navigation.\n    </p>\n  </div>\n\n  <div class=\"dropdown-menu__grid\">\n    <section class=\"dropdown-menu__section\" aria-labelledby=\"single-select-title\">\n      <h3 id=\"single-select-title\" class=\"dropdown-menu__section-title\">Single Select</h3>\n\n      <div class=\"dropdown-menu__control\">\n        <button\n          #singleMenuButton\n          id=\"single-menu-button\"\n          class=\"dropdown-menu__trigger\"\n          type=\"button\"\n          aria-haspopup=\"listbox\"\n          [attr.aria-expanded]=\"singleOpen()\"\n          aria-controls=\"single-menu-listbox\"\n          (click)=\"toggleSingleMenu()\"\n          (keydown)=\"onSingleButtonKeydown($event)\"\n        >\n          <span>{{ selectedSingleLabel }}</span>\n          <span class=\"dropdown-menu__caret\" aria-hidden=\"true\">\n            <svg\n              class=\"dropdown-menu__caret-icon\"\n              viewBox=\"0 0 24 24\"\n              focusable=\"false\"\n            >\n              <path\n                d=\"M6 9l6 6 6-6\"\n                fill=\"none\"\n                stroke=\"currentColor\"\n                stroke-width=\"2\"\n                stroke-linecap=\"round\"\n                stroke-linejoin=\"round\"\n              />\n            </svg>\n          </span>\n        </button>\n\n        @if (singleOpen()) {\n          <ul\n            id=\"single-menu-listbox\"\n            class=\"dropdown-menu__listbox\"\n            role=\"listbox\"\n            aria-labelledby=\"single-menu-button\"\n          >\n            @for (option of singleOptions; track option.id; let i = $index) {\n              <li\n                class=\"dropdown-menu__option\"\n                [class.dropdown-menu__option--active]=\"activeSingleIndex() === i\"\n                [class.dropdown-menu__option--selected]=\"selectedSingle() === option.id\"\n                role=\"option\"\n                [attr.aria-selected]=\"selectedSingle() === option.id\"\n                tabindex=\"0\"\n                (click)=\"selectSingle(option.id)\"\n                (keydown)=\"onSingleOptionKeydown($event)\"\n              >\n                {{ option.label }}\n              </li>\n            }\n          </ul>\n        }\n      </div>\n    </section>\n\n    <section class=\"dropdown-menu__section\" aria-labelledby=\"multi-select-title\">\n      <h3 id=\"multi-select-title\" class=\"dropdown-menu__section-title\">Multi Select</h3>\n\n      <div class=\"dropdown-menu__control\">\n        <button\n          #multiMenuButton\n          id=\"multi-menu-button\"\n          class=\"dropdown-menu__trigger\"\n          type=\"button\"\n          aria-haspopup=\"listbox\"\n          [attr.aria-expanded]=\"multiOpen()\"\n          aria-controls=\"multi-menu-listbox\"\n          (click)=\"toggleMultiMenu()\"\n          (keydown)=\"onMultiButtonKeydown($event)\"\n        >\n          <span>{{ selectedMultiLabel }}</span>\n          <span class=\"dropdown-menu__caret\" aria-hidden=\"true\">\n            <svg\n              class=\"dropdown-menu__caret-icon\"\n              viewBox=\"0 0 24 24\"\n              focusable=\"false\"\n            >\n              <path\n                d=\"M6 9l6 6 6-6\"\n                fill=\"none\"\n                stroke=\"currentColor\"\n                stroke-width=\"2\"\n                stroke-linecap=\"round\"\n                stroke-linejoin=\"round\"\n              />\n            </svg>\n          </span>\n        </button>\n\n        @if (multiOpen()) {\n          <ul\n            id=\"multi-menu-listbox\"\n            class=\"dropdown-menu__listbox\"\n            role=\"listbox\"\n            aria-labelledby=\"multi-menu-button\"\n            aria-multiselectable=\"true\"\n          >\n            @for (option of multiOptions; track option.id; let i = $index) {\n              <li\n                class=\"dropdown-menu__option\"\n                [class.dropdown-menu__option--active]=\"activeMultiIndex() === i\"\n                [class.dropdown-menu__option--selected]=\"isMultiSelected(option.id)\"\n                role=\"option\"\n                [attr.aria-selected]=\"isMultiSelected(option.id)\"\n                tabindex=\"0\"\n                (click)=\"toggleMultiSelection(option.id)\"\n                (keydown)=\"onMultiOptionKeydown($event)\"\n              >\n                <span>{{ option.label }}</span>\n                @if (isMultiSelected(option.id)) {\n                  <span class=\"dropdown-menu__check\" aria-hidden=\"true\">✓</span>\n                }\n              </li>\n            }\n          </ul>\n        }\n      </div>\n    </section>\n  </div>\n</div>\n"
         },
         {
             "name": "FormInputs",
@@ -3447,7 +3451,7 @@
             "styleUrlsData": "",
             "stylesData": "",
             "extends": [],
-            "templateData": "<nav class=\"navigation-bar\" aria-label=\"Primary\">\n  <div class=\"navigation-bar__inner\">\n    <a class=\"navigation-bar__brand\" href=\"#home\">\n      MindTeams A11y Demo\n    </a>\n\n    <button\n      class=\"navigation-bar__mobile-toggle\"\n      type=\"button\"\n      [attr.aria-expanded]=\"mobileMenuOpen()\"\n      aria-controls=\"primary-navigation\"\n      aria-label=\"Toggle navigation menu\"\n      (click)=\"toggleMobileMenu()\"\n    >\n      <span class=\"navigation-bar__mobile-toggle-line\"></span>\n      <span class=\"navigation-bar__mobile-toggle-line\"></span>\n      <span class=\"navigation-bar__mobile-toggle-line\"></span>\n    </button>\n\n    <div\n      id=\"primary-navigation\"\n      class=\"navigation-bar__menu\"\n      [class.navigation-bar__menu--open]=\"mobileMenuOpen()\"\n    >\n      <ul class=\"navigation-bar__list\">\n        @for (item of navItems; track item.label) {\n          <li class=\"navigation-bar__item\">\n            @if (!item.children?.length) {\n              <a\n                class=\"navigation-bar__link\"\n                [href]=\"item.href || '#'\"\n                (click)=\"closeMobileMenu()\"\n              >\n                {{ item.label }}\n              </a>\n            } @else {\n              <div\n                class=\"navigation-bar__dropdown\"\n                [class.navigation-bar__dropdown--open]=\"componentsMenuOpen()\"\n              >\n                <button\n                  id=\"components-menu-button\"\n                  class=\"navigation-bar__link navigation-bar__dropdown-trigger\"\n                  type=\"button\"\n                  aria-haspopup=\"true\"\n                  [attr.aria-expanded]=\"componentsMenuOpen()\"\n                  aria-controls=\"components-menu\"\n                  (click)=\"toggleProductsMenu()\"\n                  (keydown)=\"onMenuButtonKeydown($event)\"\n                >\n                  {{ item.label }}\n                  <span class=\"navigation-bar__caret\" aria-hidden=\"true\">▾</span>\n                </button>\n\n                <ul\n                  id=\"components-menu\"\n                  class=\"navigation-bar__dropdown-menu\"\n                  role=\"menu\"\n                >\n                  @for (child of item.children; track child.label) {\n                    <li role=\"none\">\n                      <a\n                        class=\"navigation-bar__dropdown-link\"\n                        role=\"menuitem\"\n                        [href]=\"child.href\"\n                        (keydown)=\"onDropdownItemKeydown($event)\"\n                        (click)=\"closeProductsMenu(); closeMobileMenu()\"\n                      >\n                        {{ child.label }}\n                      </a>\n                    </li>\n                  }\n                </ul>\n              </div>\n            }\n          </li>\n        }\n      </ul>\n    </div>\n  </div>\n</nav>\n"
+            "templateData": "<nav class=\"navigation-bar\" aria-label=\"Primary\">\n  <div class=\"navigation-bar__inner\">\n    <a class=\"navigation-bar__brand\" href=\"#home\">\n      MindTeams A11y Demo\n    </a>\n\n    <button\n      class=\"navigation-bar__mobile-toggle\"\n      type=\"button\"\n      [attr.aria-expanded]=\"mobileMenuOpen()\"\n      aria-controls=\"primary-navigation\"\n      aria-label=\"Toggle navigation menu\"\n      (click)=\"toggleMobileMenu()\"\n    >\n      <span class=\"navigation-bar__mobile-toggle-line\"></span>\n      <span class=\"navigation-bar__mobile-toggle-line\"></span>\n      <span class=\"navigation-bar__mobile-toggle-line\"></span>\n    </button>\n\n    <div\n      id=\"primary-navigation\"\n      class=\"navigation-bar__menu\"\n      [class.navigation-bar__menu--open]=\"mobileMenuOpen()\"\n    >\n      <ul class=\"navigation-bar__list\">\n        @for (item of navItems; track item.label) {\n          <li class=\"navigation-bar__item\">\n            @if (!item.children?.length) {\n              <a\n                class=\"navigation-bar__link\"\n                [href]=\"item.href || '#'\"\n                (click)=\"closeMobileMenu()\"\n              >\n                {{ item.label }}\n              </a>\n            } @else {\n              <div\n                class=\"navigation-bar__dropdown\"\n                [class.navigation-bar__dropdown--open]=\"componentsMenuOpen()\"\n              >\n                <button\n                  id=\"components-menu-button\"\n                  class=\"navigation-bar__link navigation-bar__dropdown-trigger\"\n                  type=\"button\"\n                  aria-haspopup=\"true\"\n                  [attr.aria-expanded]=\"componentsMenuOpen()\"\n                  aria-controls=\"components-menu\"\n                  (click)=\"toggleProductsMenu()\"\n                  (keydown)=\"onMenuButtonKeydown($event)\"\n                >\n                  {{ item.label }}\n                  <span class=\"navigation-bar__caret\" aria-hidden=\"true\">\n                    <svg\n                      class=\"navigation-bar__caret-icon\"\n                      viewBox=\"0 0 24 24\"\n                      focusable=\"false\"\n                    >\n                      <path\n                        d=\"M6 9l6 6 6-6\"\n                        fill=\"none\"\n                        stroke=\"currentColor\"\n                        stroke-width=\"2\"\n                        stroke-linecap=\"round\"\n                        stroke-linejoin=\"round\"\n                      />\n                    </svg>\n                  </span>\n                </button>\n\n                <ul\n                  id=\"components-menu\"\n                  class=\"navigation-bar__dropdown-menu\"\n                  role=\"menu\"\n                >\n                  @for (child of item.children; track child.label) {\n                    <li role=\"none\">\n                      <a\n                        class=\"navigation-bar__dropdown-link\"\n                        role=\"menuitem\"\n                        [href]=\"child.href\"\n                        (keydown)=\"onDropdownItemKeydown($event)\"\n                        (click)=\"closeProductsMenu(); closeMobileMenu()\"\n                      >\n                        {{ child.label }}\n                      </a>\n                    </li>\n                  }\n                </ul>\n              </div>\n            }\n          </li>\n        }\n      </ul>\n    </div>\n  </div>\n</nav>\n"
         },
         {
             "name": "PageComponent",
@@ -3642,6 +3646,54 @@
             "stylesData": "",
             "extends": [],
             "templateData": "<nav class=\"skip-navigation\" aria-label=\"Skip links\">\n  @for (link of links; track link.targetId) {\n    <a\n      class=\"skip-link\"\n      [href]=\"'#' + link.targetId\"\n      (click)=\"onSkip(link.targetId, $event)\"\n    >\n      {{ link.label }}\n    </a>\n  }\n</nav>\n"
+        },
+        {
+            "name": "SortIndicatorComponent",
+            "id": "component-SortIndicatorComponent-3f67b31f2ad138c67c7e1334d4bcae5ee52364f17c260e1e5d40990e463044bfc16dd8566694200bb9b59ab1de2f43452dc7c1e1d8f4ead5299fc3de5e4aaa58",
+            "file": "src/app/components/sort-indicator/sort-indicator.ts",
+            "changeDetection": "ChangeDetectionStrategy.OnPush",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-sort-indicator",
+            "styleUrls": [],
+            "styles": [
+                "\n      .sort-indicator {\n        display: inline-flex;\n        align-items: center;\n        justify-content: center;\n        min-width: 1rem;\n        color: var(--color-text);\n        line-height: 1;\n      }\n\n      .sort-indicator__svg {\n        width: 1rem;\n        height: 1rem;\n        display: block;\n        flex-shrink: 0;\n      }\n    "
+            ],
+            "template": "<span class=\"sort-indicator\" aria-hidden=\"true\">\n  @switch (state) {\n    @case ('unsorted') {\n      <svg viewBox=\"0 0 24 24\" class=\"sort-indicator__svg\">\n        <path\n          d=\"M8 7l4-4 4 4\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          stroke-width=\"2\"\n          stroke-linecap=\"round\"\n          stroke-linejoin=\"round\"\n        />\n        <path\n          d=\"M12 4v16\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          stroke-width=\"2\"\n          stroke-linecap=\"round\"\n        />\n        <path\n          d=\"M16 17l-4 4-4-4\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          stroke-width=\"2\"\n          stroke-linecap=\"round\"\n          stroke-linejoin=\"round\"\n        />\n      </svg>\n    }\n    @case ('asc') {\n      <svg viewBox=\"0 0 24 24\" class=\"sort-indicator__svg\">\n        <path\n          d=\"M12 20V4\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          stroke-width=\"2\"\n          stroke-linecap=\"round\"\n        />\n        <path\n          d=\"M8 8l4-4 4 4\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          stroke-width=\"2\"\n          stroke-linecap=\"round\"\n          stroke-linejoin=\"round\"\n        />\n      </svg>\n    }\n    @case ('desc') {\n      <svg viewBox=\"0 0 24 24\" class=\"sort-indicator__svg\">\n        <path\n          d=\"M12 4v16\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          stroke-width=\"2\"\n          stroke-linecap=\"round\"\n        />\n        <path\n          d=\"M8 16l4 4 4-4\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          stroke-width=\"2\"\n          stroke-linecap=\"round\"\n          stroke-linejoin=\"round\"\n        />\n      </svg>\n    }\n  }\n</span>\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "state",
+                    "defaultValue": "'unsorted'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 102,
+                    "type": "SortIndicatorState",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": true,
+            "imports": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { ChangeDetectionStrategy, Component, Input } from '@angular/core';\n\nexport type SortIndicatorState = 'unsorted' | 'asc' | 'desc';\n\n@Component({\n  selector: 'app-sort-indicator',\n  standalone: true,\n  template: `\n    <span class=\"sort-indicator\" aria-hidden=\"true\">\n      @switch (state) {\n        @case ('unsorted') {\n          <svg viewBox=\"0 0 24 24\" class=\"sort-indicator__svg\">\n            <path\n              d=\"M8 7l4-4 4 4\"\n              fill=\"none\"\n              stroke=\"currentColor\"\n              stroke-width=\"2\"\n              stroke-linecap=\"round\"\n              stroke-linejoin=\"round\"\n            />\n            <path\n              d=\"M12 4v16\"\n              fill=\"none\"\n              stroke=\"currentColor\"\n              stroke-width=\"2\"\n              stroke-linecap=\"round\"\n            />\n            <path\n              d=\"M16 17l-4 4-4-4\"\n              fill=\"none\"\n              stroke=\"currentColor\"\n              stroke-width=\"2\"\n              stroke-linecap=\"round\"\n              stroke-linejoin=\"round\"\n            />\n          </svg>\n        }\n        @case ('asc') {\n          <svg viewBox=\"0 0 24 24\" class=\"sort-indicator__svg\">\n            <path\n              d=\"M12 20V4\"\n              fill=\"none\"\n              stroke=\"currentColor\"\n              stroke-width=\"2\"\n              stroke-linecap=\"round\"\n            />\n            <path\n              d=\"M8 8l4-4 4 4\"\n              fill=\"none\"\n              stroke=\"currentColor\"\n              stroke-width=\"2\"\n              stroke-linecap=\"round\"\n              stroke-linejoin=\"round\"\n            />\n          </svg>\n        }\n        @case ('desc') {\n          <svg viewBox=\"0 0 24 24\" class=\"sort-indicator__svg\">\n            <path\n              d=\"M12 4v16\"\n              fill=\"none\"\n              stroke=\"currentColor\"\n              stroke-width=\"2\"\n              stroke-linecap=\"round\"\n            />\n            <path\n              d=\"M8 16l4 4 4-4\"\n              fill=\"none\"\n              stroke=\"currentColor\"\n              stroke-width=\"2\"\n              stroke-linecap=\"round\"\n              stroke-linejoin=\"round\"\n            />\n          </svg>\n        }\n      }\n    </span>\n  `,\n  styles: [\n    `\n      .sort-indicator {\n        display: inline-flex;\n        align-items: center;\n        justify-content: center;\n        min-width: 1rem;\n        color: var(--color-text);\n        line-height: 1;\n      }\n\n      .sort-indicator__svg {\n        width: 1rem;\n        height: 1rem;\n        display: block;\n        flex-shrink: 0;\n      }\n    `,\n  ],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class SortIndicatorComponent {\n  @Input() state: SortIndicatorState = 'unsorted';\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "\n      .sort-indicator {\n        display: inline-flex;\n        align-items: center;\n        justify-content: center;\n        min-width: 1rem;\n        color: var(--color-text);\n        line-height: 1;\n      }\n\n      .sort-indicator__svg {\n        width: 1rem;\n        height: 1rem;\n        display: block;\n        flex-shrink: 0;\n      }\n    \n",
+            "extends": []
         },
         {
             "name": "Tabs",
@@ -4346,6 +4398,28 @@
                 "kind": 193
             },
             {
+                "name": "SortIndicator",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "\"unsorted\" | \"asc\" | \"desc\"",
+                "file": "src/app/components/data-table/data-table.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 193
+            },
+            {
+                "name": "SortIndicatorState",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "\"unsorted\" | \"asc\" | \"desc\"",
+                "file": "src/app/components/sort-indicator/sort-indicator.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 193
+            },
+            {
                 "name": "ToastType",
                 "ctype": "miscellaneous",
                 "subtype": "typealias",
@@ -4512,6 +4586,30 @@
                     "deprecationMessage": "",
                     "description": "",
                     "kind": 193
+                },
+                {
+                    "name": "SortIndicator",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "\"unsorted\" | \"asc\" | \"desc\"",
+                    "file": "src/app/components/data-table/data-table.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 193
+                }
+            ],
+            "src/app/components/sort-indicator/sort-indicator.ts": [
+                {
+                    "name": "SortIndicatorState",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "\"unsorted\" | \"asc\" | \"desc\"",
+                    "file": "src/app/components/sort-indicator/sort-indicator.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 193
                 }
             ],
             "src/app/components/toast-alert/toast-alert.ts": [
@@ -4654,6 +4752,16 @@
                 "status": "low"
             },
             {
+                "filePath": "src/app/components/data-table/data-table.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "SortIndicator",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
                 "filePath": "src/app/components/date-picker/date-picker.ts",
                 "type": "component",
                 "linktype": "component",
@@ -4760,6 +4868,25 @@
                 "name": "SkipLink",
                 "coveragePercent": 0,
                 "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/sort-indicator/sort-indicator.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "SortIndicatorComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/sort-indicator/sort-indicator.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "SortIndicatorState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
                 "status": "low"
             },
             {

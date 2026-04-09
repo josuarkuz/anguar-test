@@ -13,7 +13,7 @@
       type="button"
       aria-haspopup="dialog"
       [attr.aria-expanded]="isOpen()"
-      aria-controls="date-picker-dialog"
+      [attr.aria-controls]="isOpen() ? 'date-picker-dialog' : null"
       (click)="toggleCalendar()"
     >
       <span>{{ selectedDateLabel }}</span>

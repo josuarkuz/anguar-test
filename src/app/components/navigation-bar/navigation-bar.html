@@ -44,7 +44,7 @@
                   type="button"
                   aria-haspopup="true"
                   [attr.aria-expanded]="componentsMenuOpen()"
-                  aria-controls="components-menu"
+                  [attr.aria-controls]="componentsMenuOpen() ? 'components-menu' : null"
                   (click)="toggleProductsMenu()"
                   (keydown)="onMenuButtonKeydown($event)"
                 >
