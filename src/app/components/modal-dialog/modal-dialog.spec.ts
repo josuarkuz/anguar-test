@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ModalDialog } from './modal-dialog';
-import { spyOn } from 'storybook/test';
 
 describe('ModalDialog', () => {
   let component: ModalDialog;
@@ -21,16 +20,17 @@ describe('ModalDialog', () => {
   });
 
   it('should not render dialog when closed', () => {
-    component.open = false;
+    fixture.componentRef.setInput('open', false);
     fixture.detectChanges();
 
     const dialog = fixture.nativeElement.querySelector('[role="dialog"]');
     expect(dialog).toBeFalsy();
   });
 
-  it('should render dialog when open', () => {
-    component.open = true;
+  it('should render dialog when open', async () => {
+    fixture.componentRef.setInput('open', true);
     fixture.detectChanges();
+    await fixture.whenStable();
 
     const dialog = fixture.nativeElement.querySelector('[role="dialog"]');
     expect(dialog).toBeTruthy();
@@ -46,11 +46,11 @@ describe('ModalDialog', () => {
 
   it('should emit openChange when closed', () => {
     component.open = true;
-    spyOn(component.openChange, 'emit');
+    const emitSpy = vi.spyOn(component.openChange, 'emit');
 
     component.close();
 
-    expect(component.openChange.emit).toHaveBeenCalledWith(false);
+    expect(emitSpy).toHaveBeenCalledWith(false);
   });
 
   it('should close on backdrop click when enabled', () => {
@@ -75,8 +75,11 @@ describe('ModalDialog', () => {
     component.open = true;
 
     const event = new KeyboardEvent('keydown', { key: 'Escape' });
+    const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
+
     component.onDocumentKeydown(event);
 
+    expect(preventDefaultSpy).toHaveBeenCalled();
     expect(component.open).toBeFalsy();
   });
 });

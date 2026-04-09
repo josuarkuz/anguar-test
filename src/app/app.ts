@@ -30,8 +30,6 @@ import { DatePicker } from './components/date-picker/date-picker';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('angulatTest');
-
   isModalOpen = signal(false);
 
   openModal(): void {

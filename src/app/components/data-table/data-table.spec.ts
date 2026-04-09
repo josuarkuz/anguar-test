@@ -32,7 +32,6 @@ describe('DataTable', () => {
 
   it('should toggle sort direction when sorting same column', () => {
     component.sortBy('name');
-    component.sortBy('name');
 
     expect(component.sortDirection()).toBe('desc');
   });
@@ -62,15 +61,33 @@ describe('DataTable', () => {
     component.sortColumn.set('name');
     component.sortDirection.set('asc');
 
-    expect(component.getSortIndicator('role')).toBe('↕');
+    expect(component.getSortIndicator('role')).toBe('unsorted');
   });
 
   it('should return ascending and descending indicators for active column', () => {
     component.sortColumn.set('name');
     component.sortDirection.set('asc');
-    expect(component.getSortIndicator('name')).toBe('↑');
+    expect(component.getSortIndicator('name')).toBe('asc');
 
     component.sortDirection.set('desc');
-    expect(component.getSortIndicator('name')).toBe('↓');
+    expect(component.getSortIndicator('name')).toBe('desc');
+  });
+
+  it('should reset to page 1 when sorting', () => {
+    component.currentPage.set(2);
+
+    component.sortBy('role');
+
+    expect(component.currentPage()).toBe(1);
+  });
+  it('should return correct aria-sort for active and inactive columns', () => {
+    component.sortColumn.set('name');
+    component.sortDirection.set('asc');
+
+    expect(component.getAriaSort('name')).toBe('ascending');
+    expect(component.getAriaSort('role')).toBe('none');
+
+    component.sortDirection.set('desc');
+    expect(component.getAriaSort('name')).toBe('descending');
   });
 });

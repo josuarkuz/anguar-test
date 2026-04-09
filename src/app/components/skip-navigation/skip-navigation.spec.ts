@@ -1,7 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SkipNavigation } from './skip-navigation';
-import { spyOn } from 'storybook/test';
-
 
 describe('SkipNavigation', () => {
   let component: SkipNavigation;
@@ -33,16 +31,33 @@ describe('SkipNavigation', () => {
   it('should focus target element when skip link is activated', () => {
     const target = document.createElement('main');
     target.id = 'main-content';
+
+    const scrollIntoViewSpy = vi.fn();
+    target.scrollIntoView = scrollIntoViewSpy;
+
     document.body.appendChild(target);
 
     const event = new MouseEvent('click');
-    spyOn(event, 'preventDefault');
+    const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
 
     component.onSkip('main-content', event);
 
-    expect(event.preventDefault).toHaveBeenCalled();
+    expect(preventDefaultSpy).toHaveBeenCalled();
+    expect(target.getAttribute('tabindex')).toBe('-1');
     expect(document.activeElement).toBe(target);
+    expect(scrollIntoViewSpy).toHaveBeenCalledWith({
+      block: 'start',
+      behavior: 'smooth',
+    });
 
     document.body.removeChild(target);
+  });
+  it('should do nothing when target element does not exist', () => {
+    const event = new MouseEvent('click');
+    const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
+
+    component.onSkip('does-not-exist', event);
+
+    expect(preventDefaultSpy).toHaveBeenCalled();
   });
 });
