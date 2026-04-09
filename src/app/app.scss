@@ -48,3 +48,34 @@
 .demo-button:focus-visible {
   background: var(--color-primary-hover);
 }
+
+
+.demo-header {
+  margin-bottom: 2rem;
+}
+
+.demo-main {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.demo-page {
+  display: block;
+}
+
+.demo-page__section {
+  margin-top: 2rem;
+}
+
+.demo-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid currentColor;
+  border-radius: 0.5rem;
+  background: transparent;
+  cursor: pointer;
+}

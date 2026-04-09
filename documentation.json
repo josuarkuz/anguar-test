@@ -223,15 +223,15 @@
         },
         {
             "name": "NavChildItem",
-            "id": "interface-NavChildItem-475d95b616724177b4fe91a9d1c6dc337ac951e546b7ad9fe4d520f851938ed607a3aa4139138e0fd70ca75dbe77016dabc00d5fe247b647750af83dd065b511",
+            "id": "interface-NavChildItem-f5cab4a1b2d049b1c9dea36a505c9a4f1accd40d537d052f71eac1f5862fb823eb743f414837a4d33044e44e4a40404603b1f5f86e4c665ece03de2d04a8fd6e",
             "file": "src/app/components/navigation-bar/navigation-bar.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { Component, HostListener, signal } from '@angular/core';\n\ninterface NavChildItem {\n  label: string;\n  href: string;\n}\n\ninterface NavItem {\n  label: string;\n  href?: string;\n  children?: NavChildItem[];\n}\n\n@Component({\n  selector: 'app-navigation-bar',\n  standalone: true,\n  imports: [CommonModule],\n  templateUrl: './navigation-bar.html',\n  styleUrl: './navigation-bar.scss',\n})\nexport class NavigationBar {\n  mobileMenuOpen = signal(false);\n  componentsMenuOpen = signal(false);\n\n  navItems: NavItem[] = [\n    { label: 'Home', href: '#home' },\n    {\n      label: 'Components',\n      children: [\n        { label: 'Skip Navigation', href: '#skip-navigation' },\n        { label: 'Navigation Bar', href: '#navigation-bar' },\n        { label: 'Modal Dialog', href: '#modal-dialog' },\n        { label: 'Form Inputs', href: '#form-inputs' },\n        { label: 'Data Table', href: '#data-table' },\n        { label: 'Dropdown Menu', href: '#dropdown-menu' },\n        { label: 'Tabs', href: '#tabs' },\n        { label: 'Accordion', href: '#accordion' },\n        { label: 'Toast Alert', href: '#toast-alert' },\n        { label: 'Date Picker', href: '#date-picker' },\n      ],\n    },\n    { label: 'Documentation', href: '#documentation' },\n    { label: 'Contact', href: '#contact' },\n  ];\n\n  toggleMobileMenu(): void {\n    this.mobileMenuOpen.update((value) => !value);\n  }\n\n  closeMobileMenu(): void {\n    this.mobileMenuOpen.set(false);\n  }\n\n  toggleProductsMenu(): void {\n    this.componentsMenuOpen.update((value) => !value);\n  }\n\n  openProductsMenu(): void {\n    this.componentsMenuOpen.set(true);\n  }\n\n  closeProductsMenu(): void {\n    this.componentsMenuOpen.set(false);\n  }\n\n  onMenuButtonKeydown(event: KeyboardEvent): void {\n    switch (event.key) {\n      case 'ArrowDown':\n      case 'Enter':\n      case ' ':\n        event.preventDefault();\n        this.openProductsMenu();\n        setTimeout(() => {\n          const firstItem = document.querySelector<HTMLElement>(\n            '#components-menu a'\n          );\n          firstItem?.focus();\n        });\n        break;\n      case 'Escape':\n        event.preventDefault();\n        this.closeProductsMenu();\n        break;\n    }\n  }\n\n  onDropdownItemKeydown(event: KeyboardEvent): void {\n    const items = Array.from(\n      document.querySelectorAll<HTMLElement>('#components-menu a')\n    );\n\n    const currentIndex = items.findIndex((item) => item === document.activeElement);\n\n    switch (event.key) {\n      case 'ArrowDown': {\n        event.preventDefault();\n        const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;\n        items[nextIndex]?.focus();\n        break;\n      }\n      case 'ArrowUp': {\n        event.preventDefault();\n        const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;\n        items[prevIndex]?.focus();\n        break;\n      }\n      case 'Home':\n        event.preventDefault();\n        items[0]?.focus();\n        break;\n      case 'End':\n        event.preventDefault();\n        items[items.length - 1]?.focus();\n        break;\n      case 'Escape':\n        event.preventDefault();\n        this.closeProductsMenu();\n        document.getElementById('components-menu-button')?.focus();\n        break;\n      case 'Tab':\n        this.closeProductsMenu();\n        break;\n    }\n  }\n\n  @HostListener('document:click', ['$event'])\n  onDocumentClick(event: MouseEvent): void {\n    const target = event.target as HTMLElement | null;\n    if (!target?.closest('.navigation-bar')) {\n      this.closeProductsMenu();\n    }\n  }\n}\n",
+            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { Component, HostListener, signal } from '@angular/core';\nimport { RouterLink, RouterLinkActive } from '@angular/router';\n\ninterface NavChildItem {\n  label: string;\n  route: string;\n}\n\ninterface NavItem {\n  label: string;\n  route?: string;\n  children?: NavChildItem[];\n}\n\n@Component({\n  selector: 'app-navigation-bar',\n  standalone: true,\n  imports: [CommonModule, RouterLink, RouterLinkActive],\n  templateUrl: './navigation-bar.html',\n  styleUrl: './navigation-bar.scss',\n})\nexport class NavigationBar {\n  mobileMenuOpen = signal(false);\n  componentsMenuOpen = signal(false);\n\n  navItems: NavItem[] = [\n    { label: 'Home', route: '/' },\n    {\n      label: 'Components',\n      children: [\n        { label: 'Forms', route: '/forms' },\n        { label: 'Modal Dialog', route: '/modal' },\n        { label: 'Data Table', route: '/table' },\n        { label: 'Dropdown Menu', route: '/dropdown' },\n        { label: 'Tabs and Accordion', route: '/tabs-accordion' },\n        { label: 'Toast and Date Picker', route: '/toast-datepicker' },\n      ],\n    },\n  ];\n\n  toggleMobileMenu(): void {\n    this.mobileMenuOpen.update((value) => !value);\n  }\n\n  closeMobileMenu(): void {\n    this.mobileMenuOpen.set(false);\n  }\n\n  toggleProductsMenu(): void {\n    this.componentsMenuOpen.update((value) => !value);\n  }\n\n  openProductsMenu(): void {\n    this.componentsMenuOpen.set(true);\n  }\n\n  closeProductsMenu(): void {\n    this.componentsMenuOpen.set(false);\n  }\n\n  onMenuButtonKeydown(event: KeyboardEvent): void {\n    switch (event.key) {\n      case 'ArrowDown':\n      case 'Enter':\n      case ' ':\n        event.preventDefault();\n        this.openProductsMenu();\n        setTimeout(() => {\n          const firstItem = document.querySelector<HTMLElement>('#components-menu a');\n          firstItem?.focus();\n        });\n        break;\n      case 'Escape':\n        event.preventDefault();\n        this.closeProductsMenu();\n        break;\n    }\n  }\n\n  onDropdownItemKeydown(event: KeyboardEvent): void {\n    const items = Array.from(\n      document.querySelectorAll<HTMLElement>('#components-menu a')\n    );\n\n    const currentIndex = items.findIndex((item) => item === document.activeElement);\n\n    switch (event.key) {\n      case 'ArrowDown': {\n        event.preventDefault();\n        const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;\n        items[nextIndex]?.focus();\n        break;\n      }\n      case 'ArrowUp': {\n        event.preventDefault();\n        const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;\n        items[prevIndex]?.focus();\n        break;\n      }\n      case 'Home':\n        event.preventDefault();\n        items[0]?.focus();\n        break;\n      case 'End':\n        event.preventDefault();\n        items[items.length - 1]?.focus();\n        break;\n      case 'Escape':\n        event.preventDefault();\n        this.closeProductsMenu();\n        document.getElementById('components-menu-button')?.focus();\n        break;\n      case 'Tab':\n        this.closeProductsMenu();\n        break;\n    }\n  }\n\n  onNavigate(): void {\n    this.closeProductsMenu();\n    this.closeMobileMenu();\n  }\n\n  @HostListener('document:click', ['$event'])\n  onDocumentClick(event: MouseEvent): void {\n    const target = event.target as HTMLElement | null;\n    if (!target?.closest('.navigation-bar')) {\n      this.closeProductsMenu();\n    }\n  }\n}\n",
             "properties": [
                 {
-                    "name": "href",
+                    "name": "label",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "string",
@@ -241,14 +241,14 @@
                     "line": 6
                 },
                 {
-                    "name": "label",
+                    "name": "route",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "string",
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 5
+                    "line": 7
                 }
             ],
             "indexSignatures": [],
@@ -258,12 +258,12 @@
         },
         {
             "name": "NavItem",
-            "id": "interface-NavItem-475d95b616724177b4fe91a9d1c6dc337ac951e546b7ad9fe4d520f851938ed607a3aa4139138e0fd70ca75dbe77016dabc00d5fe247b647750af83dd065b511",
+            "id": "interface-NavItem-f5cab4a1b2d049b1c9dea36a505c9a4f1accd40d537d052f71eac1f5862fb823eb743f414837a4d33044e44e4a40404603b1f5f86e4c665ece03de2d04a8fd6e",
             "file": "src/app/components/navigation-bar/navigation-bar.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { Component, HostListener, signal } from '@angular/core';\n\ninterface NavChildItem {\n  label: string;\n  href: string;\n}\n\ninterface NavItem {\n  label: string;\n  href?: string;\n  children?: NavChildItem[];\n}\n\n@Component({\n  selector: 'app-navigation-bar',\n  standalone: true,\n  imports: [CommonModule],\n  templateUrl: './navigation-bar.html',\n  styleUrl: './navigation-bar.scss',\n})\nexport class NavigationBar {\n  mobileMenuOpen = signal(false);\n  componentsMenuOpen = signal(false);\n\n  navItems: NavItem[] = [\n    { label: 'Home', href: '#home' },\n    {\n      label: 'Components',\n      children: [\n        { label: 'Skip Navigation', href: '#skip-navigation' },\n        { label: 'Navigation Bar', href: '#navigation-bar' },\n        { label: 'Modal Dialog', href: '#modal-dialog' },\n        { label: 'Form Inputs', href: '#form-inputs' },\n        { label: 'Data Table', href: '#data-table' },\n        { label: 'Dropdown Menu', href: '#dropdown-menu' },\n        { label: 'Tabs', href: '#tabs' },\n        { label: 'Accordion', href: '#accordion' },\n        { label: 'Toast Alert', href: '#toast-alert' },\n        { label: 'Date Picker', href: '#date-picker' },\n      ],\n    },\n    { label: 'Documentation', href: '#documentation' },\n    { label: 'Contact', href: '#contact' },\n  ];\n\n  toggleMobileMenu(): void {\n    this.mobileMenuOpen.update((value) => !value);\n  }\n\n  closeMobileMenu(): void {\n    this.mobileMenuOpen.set(false);\n  }\n\n  toggleProductsMenu(): void {\n    this.componentsMenuOpen.update((value) => !value);\n  }\n\n  openProductsMenu(): void {\n    this.componentsMenuOpen.set(true);\n  }\n\n  closeProductsMenu(): void {\n    this.componentsMenuOpen.set(false);\n  }\n\n  onMenuButtonKeydown(event: KeyboardEvent): void {\n    switch (event.key) {\n      case 'ArrowDown':\n      case 'Enter':\n      case ' ':\n        event.preventDefault();\n        this.openProductsMenu();\n        setTimeout(() => {\n          const firstItem = document.querySelector<HTMLElement>(\n            '#components-menu a'\n          );\n          firstItem?.focus();\n        });\n        break;\n      case 'Escape':\n        event.preventDefault();\n        this.closeProductsMenu();\n        break;\n    }\n  }\n\n  onDropdownItemKeydown(event: KeyboardEvent): void {\n    const items = Array.from(\n      document.querySelectorAll<HTMLElement>('#components-menu a')\n    );\n\n    const currentIndex = items.findIndex((item) => item === document.activeElement);\n\n    switch (event.key) {\n      case 'ArrowDown': {\n        event.preventDefault();\n        const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;\n        items[nextIndex]?.focus();\n        break;\n      }\n      case 'ArrowUp': {\n        event.preventDefault();\n        const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;\n        items[prevIndex]?.focus();\n        break;\n      }\n      case 'Home':\n        event.preventDefault();\n        items[0]?.focus();\n        break;\n      case 'End':\n        event.preventDefault();\n        items[items.length - 1]?.focus();\n        break;\n      case 'Escape':\n        event.preventDefault();\n        this.closeProductsMenu();\n        document.getElementById('components-menu-button')?.focus();\n        break;\n      case 'Tab':\n        this.closeProductsMenu();\n        break;\n    }\n  }\n\n  @HostListener('document:click', ['$event'])\n  onDocumentClick(event: MouseEvent): void {\n    const target = event.target as HTMLElement | null;\n    if (!target?.closest('.navigation-bar')) {\n      this.closeProductsMenu();\n    }\n  }\n}\n",
+            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { Component, HostListener, signal } from '@angular/core';\nimport { RouterLink, RouterLinkActive } from '@angular/router';\n\ninterface NavChildItem {\n  label: string;\n  route: string;\n}\n\ninterface NavItem {\n  label: string;\n  route?: string;\n  children?: NavChildItem[];\n}\n\n@Component({\n  selector: 'app-navigation-bar',\n  standalone: true,\n  imports: [CommonModule, RouterLink, RouterLinkActive],\n  templateUrl: './navigation-bar.html',\n  styleUrl: './navigation-bar.scss',\n})\nexport class NavigationBar {\n  mobileMenuOpen = signal(false);\n  componentsMenuOpen = signal(false);\n\n  navItems: NavItem[] = [\n    { label: 'Home', route: '/' },\n    {\n      label: 'Components',\n      children: [\n        { label: 'Forms', route: '/forms' },\n        { label: 'Modal Dialog', route: '/modal' },\n        { label: 'Data Table', route: '/table' },\n        { label: 'Dropdown Menu', route: '/dropdown' },\n        { label: 'Tabs and Accordion', route: '/tabs-accordion' },\n        { label: 'Toast and Date Picker', route: '/toast-datepicker' },\n      ],\n    },\n  ];\n\n  toggleMobileMenu(): void {\n    this.mobileMenuOpen.update((value) => !value);\n  }\n\n  closeMobileMenu(): void {\n    this.mobileMenuOpen.set(false);\n  }\n\n  toggleProductsMenu(): void {\n    this.componentsMenuOpen.update((value) => !value);\n  }\n\n  openProductsMenu(): void {\n    this.componentsMenuOpen.set(true);\n  }\n\n  closeProductsMenu(): void {\n    this.componentsMenuOpen.set(false);\n  }\n\n  onMenuButtonKeydown(event: KeyboardEvent): void {\n    switch (event.key) {\n      case 'ArrowDown':\n      case 'Enter':\n      case ' ':\n        event.preventDefault();\n        this.openProductsMenu();\n        setTimeout(() => {\n          const firstItem = document.querySelector<HTMLElement>('#components-menu a');\n          firstItem?.focus();\n        });\n        break;\n      case 'Escape':\n        event.preventDefault();\n        this.closeProductsMenu();\n        break;\n    }\n  }\n\n  onDropdownItemKeydown(event: KeyboardEvent): void {\n    const items = Array.from(\n      document.querySelectorAll<HTMLElement>('#components-menu a')\n    );\n\n    const currentIndex = items.findIndex((item) => item === document.activeElement);\n\n    switch (event.key) {\n      case 'ArrowDown': {\n        event.preventDefault();\n        const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;\n        items[nextIndex]?.focus();\n        break;\n      }\n      case 'ArrowUp': {\n        event.preventDefault();\n        const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;\n        items[prevIndex]?.focus();\n        break;\n      }\n      case 'Home':\n        event.preventDefault();\n        items[0]?.focus();\n        break;\n      case 'End':\n        event.preventDefault();\n        items[items.length - 1]?.focus();\n        break;\n      case 'Escape':\n        event.preventDefault();\n        this.closeProductsMenu();\n        document.getElementById('components-menu-button')?.focus();\n        break;\n      case 'Tab':\n        this.closeProductsMenu();\n        break;\n    }\n  }\n\n  onNavigate(): void {\n    this.closeProductsMenu();\n    this.closeMobileMenu();\n  }\n\n  @HostListener('document:click', ['$event'])\n  onDocumentClick(event: MouseEvent): void {\n    const target = event.target as HTMLElement | null;\n    if (!target?.closest('.navigation-bar')) {\n      this.closeProductsMenu();\n    }\n  }\n}\n",
             "properties": [
                 {
                     "name": "children",
@@ -273,17 +273,7 @@
                     "indexKey": "",
                     "optional": true,
                     "description": "",
-                    "line": 12
-                },
-                {
-                    "name": "href",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "string",
-                    "indexKey": "",
-                    "optional": true,
-                    "description": "",
-                    "line": 11
+                    "line": 13
                 },
                 {
                     "name": "label",
@@ -293,7 +283,17 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 10
+                    "line": 11
+                },
+                {
+                    "name": "route",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": true,
+                    "description": "",
+                    "line": 12
                 }
             ],
             "indexSignatures": [],
@@ -303,12 +303,12 @@
         },
         {
             "name": "SkipLink",
-            "id": "interface-SkipLink-7ef05efe5aea17cdbc1245bd253baa16493eded916cfa8425230ec09f455cd0241305361a94cb10ff506ea2647f149e10b47ad8a0d4b1f960713dfe055c5a44a",
+            "id": "interface-SkipLink-4268343c45d8530ed9ad03f2df42dffbf09f8ede1f3e92b3f5b0ee4518640e99426dd393af0b619f3c0b24fe720077f0e550802b509c45deb15e3b87617777bd",
             "file": "src/app/components/skip-navigation/skip-navigation.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import { Component, Input } from '@angular/core';\n\ninterface SkipLink {\n  label: string;\n  targetId: string;\n}\n\n\n@Component({\n  selector: 'app-skip-navigation',\n  standalone: true,\n  imports: [],\n  templateUrl: './skip-navigation.html',\n  styleUrl: './skip-navigation.scss',\n})\nexport class SkipNavigation {\n  @Input() links: SkipLink[] = [\n    { label: 'Skip to main content', targetId: 'main-content' },\n    { label: 'Skip to navigation', targetId: 'main-navigation' },\n  ];\n\n  onSkip(targetId: string, event: Event): void {\n    event.preventDefault();\n\n    const target = document.getElementById(targetId);\n\n    if (!target) {\n      return;\n    }\n\n    if (!target.hasAttribute('tabindex')) {\n      target.setAttribute('tabindex', '-1');\n    }\n\n    target.focus();\n    target.scrollIntoView({ block: 'start', behavior: 'smooth' });\n  }\n}\n",
+            "sourceCode": "import { Component, Input } from '@angular/core';\n\ninterface SkipLink {\n  label: string;\n  targetId: string;\n}\n\n@Component({\n  selector: 'app-skip-navigation',\n  standalone: true,\n  imports: [],\n  templateUrl: './skip-navigation.html',\n  styleUrl: './skip-navigation.scss',\n})\nexport class SkipNavigation {\n  @Input() links: SkipLink[] = [\n    { label: 'Skip to main content', targetId: 'main-content' },\n    { label: 'Skip to primary navigation', targetId: 'main-navigation' },\n  ];\n\n  onSkip(targetId: string, event: Event): void {\n    event.preventDefault();\n\n    const target = document.getElementById(targetId) as HTMLElement | null;\n\n    if (!target) {\n      return;\n    }\n\n    if (!target.hasAttribute('tabindex')) {\n      target.setAttribute('tabindex', '-1');\n    }\n\n    target.focus();\n    target.scrollIntoView({ block: 'start' });\n  }\n}\n",
             "properties": [
                 {
                     "name": "label",
@@ -678,7 +678,7 @@
         },
         {
             "name": "App",
-            "id": "component-App-2e7edf2a5e0a73858b8950c9dd8219bdc6a653e9dc654bc48457856ce20de49f7dfe0aa9683382af060960dcd6be5c0b70198cddd387c94039dd92ea4ec8f9c5",
+            "id": "component-App-019983f7bd69648fdb3a4ae6853a7615d6a6ba582fb2830f398333a222809401a4a14a3194f5b030a40a25540db036b54212e02a94e4a869e0960d85f818c998",
             "file": "src/app/app.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -695,88 +695,8 @@
             "hostDirectives": [],
             "inputsClass": [],
             "outputsClass": [],
-            "propertiesClass": [
-                {
-                    "name": "isModalOpen",
-                    "defaultValue": "signal(false)",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "unknown",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 35
-                },
-                {
-                    "name": "title",
-                    "defaultValue": "signal('angulatTest')",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "unknown",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 33,
-                    "modifierKind": [
-                        124,
-                        148
-                    ]
-                }
-            ],
-            "methodsClass": [
-                {
-                    "name": "closeModal",
-                    "args": [],
-                    "optional": false,
-                    "returnType": "void",
-                    "typeParameters": [],
-                    "line": 45,
-                    "deprecated": false,
-                    "deprecationMessage": ""
-                },
-                {
-                    "name": "onModalOpenChange",
-                    "args": [
-                        {
-                            "name": "value",
-                            "type": "boolean",
-                            "optional": false,
-                            "dotDotDotToken": false,
-                            "deprecated": false,
-                            "deprecationMessage": ""
-                        }
-                    ],
-                    "optional": false,
-                    "returnType": "void",
-                    "typeParameters": [],
-                    "line": 41,
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "jsdoctags": [
-                        {
-                            "name": "value",
-                            "type": "boolean",
-                            "optional": false,
-                            "dotDotDotToken": false,
-                            "deprecated": false,
-                            "deprecationMessage": "",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "openModal",
-                    "args": [],
-                    "optional": false,
-                    "returnType": "void",
-                    "typeParameters": [],
-                    "line": 37,
-                    "deprecated": false,
-                    "deprecationMessage": ""
-                }
-            ],
+            "propertiesClass": [],
+            "methodsClass": [],
             "deprecated": false,
             "deprecationMessage": "",
             "hostBindings": [],
@@ -791,42 +711,18 @@
                 },
                 {
                     "name": "SkipNavigation"
-                },
-                {
-                    "name": "ModalDialog"
-                },
-                {
-                    "name": "FormInputs"
-                },
-                {
-                    "name": "DataTable"
-                },
-                {
-                    "name": "DropdownMenu"
-                },
-                {
-                    "name": "Tabs"
-                },
-                {
-                    "name": "Accordion"
-                },
-                {
-                    "name": "ToastAlert"
-                },
-                {
-                    "name": "DatePicker"
                 }
             ],
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, signal } from '@angular/core';\nimport { RouterOutlet } from '@angular/router';\nimport { SkipNavigation } from './components/skip-navigation/skip-navigation';\nimport { NavigationBar } from './components/navigation-bar/navigation-bar';\nimport { ModalDialog } from './components/modal-dialog/modal-dialog';\nimport { FormInputs } from './components/form-inputs/form-inputs';\nimport { DataTable } from './components/data-table/data-table';\nimport { DropdownMenu } from './components/dropdown-menu/dropdown-menu';\nimport { Tabs } from './components/tabs/tabs';\nimport { Accordion } from './components/accordion/accordion';\nimport { ToastAlert } from './components/toast-alert/toast-alert';\nimport { DatePicker } from './components/date-picker/date-picker';\n\n@Component({\n  selector: 'app-root',\n  imports: [\n    RouterOutlet,\n    NavigationBar,\n    SkipNavigation,\n    ModalDialog,\n    FormInputs,\n    DataTable,\n    DropdownMenu,\n    Tabs,\n    Accordion,\n    ToastAlert,\n    DatePicker,\n  ],\n  templateUrl: './app.html',\n  styleUrl: './app.scss'\n})\nexport class App {\n  protected readonly title = signal('angulatTest');\n\n  isModalOpen = signal(false);\n\n  openModal(): void {\n    this.isModalOpen.set(true);\n  }\n\n  onModalOpenChange(value: boolean): void {\n    this.isModalOpen.set(value);\n  }\n\n  closeModal(): void {\n    this.isModalOpen.set(false);\n  }\n\n}\n",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { RouterOutlet } from '@angular/router';\nimport { SkipNavigation } from './components/skip-navigation/skip-navigation';\nimport { NavigationBar } from './components/navigation-bar/navigation-bar';\n\n@Component({\n  selector: 'app-root',\n  imports: [RouterOutlet, NavigationBar, SkipNavigation],\n  templateUrl: './app.html',\n  styleUrl: './app.scss'\n})\nexport class App {}\n",
             "styleUrl": "./app.scss",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
             "extends": [],
-            "templateData": "<app-skip-navigation></app-skip-navigation>\n\n<header id=\"main-navigation\" class=\"demo-header\">\n  <app-navigation-bar></app-navigation-bar>\n</header>\n\n<main id=\"main-content\" class=\"demo-main\" tabindex=\"-1\">\n  <section id=\"home\">\n    <h1>Accessible Angular Component Library</h1>\n    <p>Internal training demo.</p>\n  </section>\n\n  <section id=\"navigation-bar\" style=\"margin-top: 2rem;\">\n    <h2>Navigation Bar</h2>\n    <p>Desktop + mobile responsive navigation demo.</p>\n  </section>\n\n  <section id=\"skip-navigation\" style=\"margin-top: 2rem;\">\n    <h2>Skip Navigation</h2>\n    <p>Use Tab from the top of the page to test skip links.</p>\n  </section>\n\n  <section id=\"form-inputs\" class=\"demo-section\">\n    <h2>Form Inputs</h2>\n    <p>Accessible text, select, radio, checkbox, and textarea controls with validation.</p>\n\n    <div style=\"margin-top: 1rem;\">\n      <app-form-inputs></app-form-inputs>\n    </div>\n  </section>\n\n  <section id=\"modal-dialog\" style=\"margin-top: 2rem;\">\n    <h2>Modal Dialog</h2>\n    <p>Accessible modal dialog demo.</p>\n\n    <button\n      class=\"demo-button\"\n      type=\"button\"\n      (click)=\"openModal()\"\n    >\n      Open modal dialog\n    </button>\n\n    <div style=\"margin-top: 1rem;\">\n      <app-modal-dialog\n        [open]=\"isModalOpen()\"\n        title=\"Delete item\"\n        [description]=\"'This action cannot be undone. Please confirm if you want to continue.'\"\n        [closeOnBackdropClick]=\"true\"\n        (openChange)=\"onModalOpenChange($event)\"\n      >\n        <p>\n          This is a real interactive demo. Open it with the button, then test\n          keyboard navigation, Escape, and focus return to the trigger.\n        </p>\n      </app-modal-dialog>\n    </div>\n  </section>\n\n  <section id=\"data-table\" class=\"demo-section\">\n    <h2>Data Table</h2>\n    <p>Accessible table with sortable columns and pagination.</p>\n\n    <div style=\"margin-top: 1rem;\">\n      <app-data-table></app-data-table>\n    </div>\n  </section>\n\n  <section id=\"dropdown-menu\" class=\"demo-section\">\n    <h2>Dropdown Menu</h2>\n    <p>Accessible single-select and multi-select dropdown menus.</p>\n\n    <div style=\"margin-top: 1rem;\">\n      <app-dropdown-menu></app-dropdown-menu>\n    </div>\n  </section>\n\n  <section id=\"tabs\" class=\"demo-section\">\n    <h2>Tabs</h2>\n    <p>Accessible tabs with keyboard navigation and ARIA relationships.</p>\n\n    <div style=\"margin-top: 1rem;\">\n      <app-tabs></app-tabs>\n    </div>\n  </section>\n\n  <section id=\"accordion\" class=\"demo-section\">\n    <h2>Accordion</h2>\n    <p>Accessible expandable sections with semantic buttons and ARIA state.</p>\n\n    <div style=\"margin-top: 1rem;\">\n      <app-accordion></app-accordion>\n    </div>\n  </section>\n\n  <section id=\"toast-alert\" class=\"demo-section\">\n    <h2>Toast / Alert</h2>\n    <p>Accessible live-region notifications with optional auto-dismiss.</p>\n\n    <div style=\"margin-top: 1rem;\">\n      <app-toast-alert></app-toast-alert>\n    </div>\n  </section>\n\n  <section id=\"date-picker\" class=\"demo-section\">\n    <h2>Date Picker</h2>\n    <p>Accessible calendar with ARIA grid semantics and keyboard navigation.</p>\n\n    <div style=\"margin-top: 1rem;\">\n      <app-date-picker></app-date-picker>\n    </div>\n  </section>\n\n  <section id=\"documentation\" style=\"margin-top: 2rem;\">\n    <h2>Documentation</h2>\n    <p>Component usage and accessibility notes.</p>\n  </section>\n\n  <section id=\"contact\" style=\"margin-top: 2rem;\">\n    <h2>Contact</h2>\n    <p>Demo footer content.</p>\n  </section>\n\n  <router-outlet />\n</main>\n"
+            "templateData": "<app-skip-navigation></app-skip-navigation>\n\n<header id=\"main-navigation\" class=\"demo-header\">\n  <app-navigation-bar></app-navigation-bar>\n</header>\n\n<main id=\"main-content\" class=\"demo-main\" tabindex=\"-1\">\n  <router-outlet />\n</main>\n"
         },
         {
             "name": "ButtonComponent",
@@ -2050,7 +1946,7 @@
                     }
                 }
             },
-            "templateData": "<div class=\"date-picker\">\n  <div class=\"date-picker__header\">\n    <h2 class=\"date-picker__title\">Date Picker</h2>\n    <p class=\"date-picker__description\">\n      Accessible calendar with ARIA grid semantics and keyboard navigation.\n    </p>\n  </div>\n\n  <div class=\"date-picker__control\">\n    <button\n      id=\"date-picker-trigger\"\n      class=\"date-picker__trigger\"\n      type=\"button\"\n      aria-haspopup=\"dialog\"\n      [attr.aria-expanded]=\"isOpen()\"\n      aria-controls=\"date-picker-dialog\"\n      (click)=\"toggleCalendar()\"\n    >\n      <span>{{ selectedDateLabel }}</span>\n      <span class=\"date-picker__trigger-icon\" aria-hidden=\"true\">📅</span>\n    </button>\n\n    @if (isOpen()) {\n      <div\n        id=\"date-picker-dialog\"\n        class=\"date-picker__popup\"\n        role=\"dialog\"\n        aria-modal=\"false\"\n        aria-labelledby=\"date-picker-month-label\"\n      >\n        <div class=\"date-picker__toolbar\">\n          <button\n            class=\"date-picker__nav-button\"\n            type=\"button\"\n            aria-label=\"Previous month\"\n            (click)=\"previousMonth()\"\n          >\n            ‹\n          </button>\n\n          <h3 id=\"date-picker-month-label\" class=\"date-picker__month-label\">\n            {{ monthLabel() }}\n          </h3>\n\n          <button\n            class=\"date-picker__nav-button\"\n            type=\"button\"\n            aria-label=\"Next month\"\n            (click)=\"nextMonth()\"\n          >\n            ›\n          </button>\n        </div>\n\n        <div\n          class=\"date-picker__grid\"\n          role=\"grid\"\n          aria-labelledby=\"date-picker-month-label\"\n        >\n          @for (label of weekdayLabels; track label) {\n            <div class=\"date-picker__weekday\" role=\"columnheader\">\n              {{ label }}\n            </div>\n          }\n\n          @for (day of calendarDays(); track trackByDate($index, day)) {\n            <button\n              class=\"date-picker__day\"\n              [class.date-picker__day--outside]=\"!day.isCurrentMonth\"\n              [class.date-picker__day--today]=\"day.isToday\"\n              [class.date-picker__day--selected]=\"day.isSelected\"\n              [class.date-picker__day--focused]=\"day.isFocused\"\n              type=\"button\"\n              role=\"gridcell\"\n              [attr.aria-selected]=\"day.isSelected\"\n              [attr.aria-label]=\"formatAriaLabel(day.date)\"\n              [attr.tabindex]=\"day.isFocused ? 0 : -1\"\n              (click)=\"selectDate(day.date)\"\n              (focus)=\"setFocusedDate(day.date)\"\n              (keydown)=\"onDayKeydown($event)\"\n            >\n              {{ day.dayNumber }}\n            </button>\n          }\n        </div>\n\n        <div class=\"date-picker__footer\">\n          <button\n            class=\"date-picker__footer-button\"\n            type=\"button\"\n            (click)=\"selectToday()\"\n          >\n            Today\n          </button>\n\n          <button\n            class=\"date-picker__footer-button\"\n            type=\"button\"\n            (click)=\"closeCalendar()\"\n          >\n            Close\n          </button>\n        </div>\n      </div>\n    }\n  </div>\n</div>\n"
+            "templateData": "<div class=\"date-picker\">\n  <div class=\"date-picker__header\">\n    <h2 class=\"date-picker__title\">Date Picker</h2>\n    <p class=\"date-picker__description\">\n      Accessible calendar with ARIA grid semantics and keyboard navigation.\n    </p>\n  </div>\n\n  <div class=\"date-picker__control\">\n    <button\n      id=\"date-picker-trigger\"\n      class=\"date-picker__trigger\"\n      type=\"button\"\n      aria-haspopup=\"dialog\"\n      [attr.aria-expanded]=\"isOpen()\"\n      [attr.aria-controls]=\"isOpen() ? 'date-picker-dialog' : null\"\n      (click)=\"toggleCalendar()\"\n    >\n      <span>{{ selectedDateLabel }}</span>\n      <span class=\"date-picker__trigger-icon\" aria-hidden=\"true\">📅</span>\n    </button>\n\n    @if (isOpen()) {\n      <div\n        id=\"date-picker-dialog\"\n        class=\"date-picker__popup\"\n        role=\"dialog\"\n        aria-modal=\"false\"\n        aria-labelledby=\"date-picker-month-label\"\n      >\n        <div class=\"date-picker__toolbar\">\n          <button\n            class=\"date-picker__nav-button\"\n            type=\"button\"\n            aria-label=\"Previous month\"\n            (click)=\"previousMonth()\"\n          >\n            ‹\n          </button>\n\n          <h3 id=\"date-picker-month-label\" class=\"date-picker__month-label\">\n            {{ monthLabel() }}\n          </h3>\n\n          <button\n            class=\"date-picker__nav-button\"\n            type=\"button\"\n            aria-label=\"Next month\"\n            (click)=\"nextMonth()\"\n          >\n            ›\n          </button>\n        </div>\n\n        <div\n          class=\"date-picker__grid\"\n          role=\"grid\"\n          aria-labelledby=\"date-picker-month-label\"\n        >\n          @for (label of weekdayLabels; track label) {\n            <div class=\"date-picker__weekday\" role=\"columnheader\">\n              {{ label }}\n            </div>\n          }\n\n          @for (day of calendarDays(); track trackByDate($index, day)) {\n            <button\n              class=\"date-picker__day\"\n              [class.date-picker__day--outside]=\"!day.isCurrentMonth\"\n              [class.date-picker__day--today]=\"day.isToday\"\n              [class.date-picker__day--selected]=\"day.isSelected\"\n              [class.date-picker__day--focused]=\"day.isFocused\"\n              type=\"button\"\n              role=\"gridcell\"\n              [attr.aria-selected]=\"day.isSelected\"\n              [attr.aria-label]=\"formatAriaLabel(day.date)\"\n              [attr.tabindex]=\"day.isFocused ? 0 : -1\"\n              (click)=\"selectDate(day.date)\"\n              (focus)=\"setFocusedDate(day.date)\"\n              (keydown)=\"onDayKeydown($event)\"\n            >\n              {{ day.dayNumber }}\n            </button>\n          }\n        </div>\n\n        <div class=\"date-picker__footer\">\n          <button\n            class=\"date-picker__footer-button\"\n            type=\"button\"\n            (click)=\"selectToday()\"\n          >\n            Today\n          </button>\n\n          <button\n            class=\"date-picker__footer-button\"\n            type=\"button\"\n            (click)=\"closeCalendar()\"\n          >\n            Close\n          </button>\n        </div>\n      </div>\n    }\n  </div>\n</div>\n"
         },
         {
             "name": "DropdownMenu",
@@ -2572,7 +2468,49 @@
                     }
                 }
             },
-            "templateData": "<div class=\"dropdown-menu\">\n  <div class=\"dropdown-menu__header\">\n    <h2 class=\"dropdown-menu__title\">Dropdown Menu</h2>\n    <p class=\"dropdown-menu__description\">\n      Accessible single-select and multi-select dropdown menus with keyboard navigation.\n    </p>\n  </div>\n\n  <div class=\"dropdown-menu__grid\">\n    <section class=\"dropdown-menu__section\" aria-labelledby=\"single-select-title\">\n      <h3 id=\"single-select-title\" class=\"dropdown-menu__section-title\">Single Select</h3>\n\n      <div class=\"dropdown-menu__control\">\n        <button\n          #singleMenuButton\n          id=\"single-menu-button\"\n          class=\"dropdown-menu__trigger\"\n          type=\"button\"\n          aria-haspopup=\"listbox\"\n          [attr.aria-expanded]=\"singleOpen()\"\n          aria-controls=\"single-menu-listbox\"\n          (click)=\"toggleSingleMenu()\"\n          (keydown)=\"onSingleButtonKeydown($event)\"\n        >\n          <span>{{ selectedSingleLabel }}</span>\n          <span class=\"dropdown-menu__caret\" aria-hidden=\"true\">\n            <svg\n              class=\"dropdown-menu__caret-icon\"\n              viewBox=\"0 0 24 24\"\n              focusable=\"false\"\n            >\n              <path\n                d=\"M6 9l6 6 6-6\"\n                fill=\"none\"\n                stroke=\"currentColor\"\n                stroke-width=\"2\"\n                stroke-linecap=\"round\"\n                stroke-linejoin=\"round\"\n              />\n            </svg>\n          </span>\n        </button>\n\n        @if (singleOpen()) {\n          <ul\n            id=\"single-menu-listbox\"\n            class=\"dropdown-menu__listbox\"\n            role=\"listbox\"\n            aria-labelledby=\"single-menu-button\"\n          >\n            @for (option of singleOptions; track option.id; let i = $index) {\n              <li\n                class=\"dropdown-menu__option\"\n                [class.dropdown-menu__option--active]=\"activeSingleIndex() === i\"\n                [class.dropdown-menu__option--selected]=\"selectedSingle() === option.id\"\n                role=\"option\"\n                [attr.aria-selected]=\"selectedSingle() === option.id\"\n                tabindex=\"0\"\n                (click)=\"selectSingle(option.id)\"\n                (keydown)=\"onSingleOptionKeydown($event)\"\n              >\n                {{ option.label }}\n              </li>\n            }\n          </ul>\n        }\n      </div>\n    </section>\n\n    <section class=\"dropdown-menu__section\" aria-labelledby=\"multi-select-title\">\n      <h3 id=\"multi-select-title\" class=\"dropdown-menu__section-title\">Multi Select</h3>\n\n      <div class=\"dropdown-menu__control\">\n        <button\n          #multiMenuButton\n          id=\"multi-menu-button\"\n          class=\"dropdown-menu__trigger\"\n          type=\"button\"\n          aria-haspopup=\"listbox\"\n          [attr.aria-expanded]=\"multiOpen()\"\n          aria-controls=\"multi-menu-listbox\"\n          (click)=\"toggleMultiMenu()\"\n          (keydown)=\"onMultiButtonKeydown($event)\"\n        >\n          <span>{{ selectedMultiLabel }}</span>\n          <span class=\"dropdown-menu__caret\" aria-hidden=\"true\">\n            <svg\n              class=\"dropdown-menu__caret-icon\"\n              viewBox=\"0 0 24 24\"\n              focusable=\"false\"\n            >\n              <path\n                d=\"M6 9l6 6 6-6\"\n                fill=\"none\"\n                stroke=\"currentColor\"\n                stroke-width=\"2\"\n                stroke-linecap=\"round\"\n                stroke-linejoin=\"round\"\n              />\n            </svg>\n          </span>\n        </button>\n\n        @if (multiOpen()) {\n          <ul\n            id=\"multi-menu-listbox\"\n            class=\"dropdown-menu__listbox\"\n            role=\"listbox\"\n            aria-labelledby=\"multi-menu-button\"\n            aria-multiselectable=\"true\"\n          >\n            @for (option of multiOptions; track option.id; let i = $index) {\n              <li\n                class=\"dropdown-menu__option\"\n                [class.dropdown-menu__option--active]=\"activeMultiIndex() === i\"\n                [class.dropdown-menu__option--selected]=\"isMultiSelected(option.id)\"\n                role=\"option\"\n                [attr.aria-selected]=\"isMultiSelected(option.id)\"\n                tabindex=\"0\"\n                (click)=\"toggleMultiSelection(option.id)\"\n                (keydown)=\"onMultiOptionKeydown($event)\"\n              >\n                <span>{{ option.label }}</span>\n                @if (isMultiSelected(option.id)) {\n                  <span class=\"dropdown-menu__check\" aria-hidden=\"true\">✓</span>\n                }\n              </li>\n            }\n          </ul>\n        }\n      </div>\n    </section>\n  </div>\n</div>\n"
+            "templateData": "<div class=\"dropdown-menu\">\n  <div class=\"dropdown-menu__header\">\n    <h2 class=\"dropdown-menu__title\">Dropdown Menu</h2>\n    <p class=\"dropdown-menu__description\">\n      Accessible single-select and multi-select dropdown menus with keyboard navigation.\n    </p>\n  </div>\n\n  <div class=\"dropdown-menu__grid\">\n    <section class=\"dropdown-menu__section\" aria-labelledby=\"single-select-title\">\n      <h3 id=\"single-select-title\" class=\"dropdown-menu__section-title\">Single Select</h3>\n\n      <div class=\"dropdown-menu__control\">\n        <button\n          #singleMenuButton\n          id=\"single-menu-button\"\n          class=\"dropdown-menu__trigger\"\n          type=\"button\"\n          aria-haspopup=\"listbox\"\n          [attr.aria-expanded]=\"singleOpen()\"\n          [attr.aria-controls]=\"singleOpen() ? 'single-menu-listbox' : null\"\n          (click)=\"toggleSingleMenu()\"\n          (keydown)=\"onSingleButtonKeydown($event)\"\n        >\n          <span>{{ selectedSingleLabel }}</span>\n          <span class=\"dropdown-menu__caret\" aria-hidden=\"true\">\n            <svg\n              class=\"dropdown-menu__caret-icon\"\n              viewBox=\"0 0 24 24\"\n              focusable=\"false\"\n            >\n              <path\n                d=\"M6 9l6 6 6-6\"\n                fill=\"none\"\n                stroke=\"currentColor\"\n                stroke-width=\"2\"\n                stroke-linecap=\"round\"\n                stroke-linejoin=\"round\"\n              />\n            </svg>\n          </span>\n        </button>\n\n        @if (singleOpen()) {\n          <ul\n            id=\"single-menu-listbox\"\n            class=\"dropdown-menu__listbox\"\n            role=\"listbox\"\n            aria-labelledby=\"single-menu-button\"\n          >\n            @for (option of singleOptions; track option.id; let i = $index) {\n              <li\n                class=\"dropdown-menu__option\"\n                [class.dropdown-menu__option--active]=\"activeSingleIndex() === i\"\n                [class.dropdown-menu__option--selected]=\"selectedSingle() === option.id\"\n                role=\"option\"\n                [attr.aria-selected]=\"selectedSingle() === option.id\"\n                tabindex=\"0\"\n                (click)=\"selectSingle(option.id)\"\n                (keydown)=\"onSingleOptionKeydown($event)\"\n              >\n                {{ option.label }}\n              </li>\n            }\n          </ul>\n        }\n      </div>\n    </section>\n\n    <section class=\"dropdown-menu__section\" aria-labelledby=\"multi-select-title\">\n      <h3 id=\"multi-select-title\" class=\"dropdown-menu__section-title\">Multi Select</h3>\n\n      <div class=\"dropdown-menu__control\">\n        <button\n          #multiMenuButton\n          id=\"multi-menu-button\"\n          class=\"dropdown-menu__trigger\"\n          type=\"button\"\n          aria-haspopup=\"listbox\"\n          [attr.aria-expanded]=\"multiOpen()\"\n          [attr.aria-controls]=\"multiOpen() ? 'multi-menu-listbox' : null\"\n          (click)=\"toggleMultiMenu()\"\n          (keydown)=\"onMultiButtonKeydown($event)\"\n        >\n          <span>{{ selectedMultiLabel }}</span>\n          <span class=\"dropdown-menu__caret\" aria-hidden=\"true\">\n            <svg\n              class=\"dropdown-menu__caret-icon\"\n              viewBox=\"0 0 24 24\"\n              focusable=\"false\"\n            >\n              <path\n                d=\"M6 9l6 6 6-6\"\n                fill=\"none\"\n                stroke=\"currentColor\"\n                stroke-width=\"2\"\n                stroke-linecap=\"round\"\n                stroke-linejoin=\"round\"\n              />\n            </svg>\n          </span>\n        </button>\n\n        @if (multiOpen()) {\n          <ul\n            id=\"multi-menu-listbox\"\n            class=\"dropdown-menu__listbox\"\n            role=\"listbox\"\n            aria-labelledby=\"multi-menu-button\"\n            aria-multiselectable=\"true\"\n          >\n            @for (option of multiOptions; track option.id; let i = $index) {\n              <li\n                class=\"dropdown-menu__option\"\n                [class.dropdown-menu__option--active]=\"activeMultiIndex() === i\"\n                [class.dropdown-menu__option--selected]=\"isMultiSelected(option.id)\"\n                role=\"option\"\n                [attr.aria-selected]=\"isMultiSelected(option.id)\"\n                tabindex=\"0\"\n                (click)=\"toggleMultiSelection(option.id)\"\n                (keydown)=\"onMultiOptionKeydown($event)\"\n              >\n                <span>{{ option.label }}</span>\n                @if (isMultiSelected(option.id)) {\n                  <span class=\"dropdown-menu__check\" aria-hidden=\"true\">✓</span>\n                }\n              </li>\n            }\n          </ul>\n        }\n      </div>\n    </section>\n  </div>\n</div>\n"
+        },
+        {
+            "name": "DropdownScreen",
+            "id": "component-DropdownScreen-bca88bcfbcc59f51a960e2313a15e8a4433ae366ca2fd10b0cbd4c0ec1baa2c3d2d71eca8bdf036be249feee42460d8e4793afb5ecbe377f011c011785039f55",
+            "file": "src/app/screens/dropdown/dropdown-screen.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-dropdown-screen",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./dropdown-screen.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "DropdownMenu"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { DropdownMenu } from '../../components/dropdown-menu/dropdown-menu';\n\n@Component({\n  selector: 'app-dropdown-screen',\n  imports: [DropdownMenu],\n  templateUrl: './dropdown-screen.html',\n  styleUrl: './dropdown-screen.scss'\n})\nexport class DropdownScreen {}\n",
+            "styleUrl": "./dropdown-screen.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "<section class=\"demo-page\">\n  <h1>Dropdown Menu</h1>\n  <p>Accessible single-select and multi-select dropdown menus.</p>\n\n  <section class=\"demo-page__section\" aria-labelledby=\"dropdown-demo-heading\">\n    <h2 id=\"dropdown-demo-heading\">Interactive demo</h2>\n    <app-dropdown-menu></app-dropdown-menu>\n  </section>\n</section>\n"
         },
         {
             "name": "FormInputs",
@@ -2740,6 +2678,48 @@
             "templateData": "<form\n  class=\"form-inputs\"\n  novalidate\n  (ngSubmit)=\"submitForm()\"\n  aria-labelledby=\"form-inputs-title\"\n>\n  <div class=\"form-inputs__header\">\n    <h2 id=\"form-inputs-title\" class=\"form-inputs__title\">Form Inputs</h2>\n    <p class=\"form-inputs__description\">\n      Accessible form controls with labels, hints, required states, and error messaging.\n    </p>\n  </div>\n\n  <div class=\"form-inputs__field\">\n    <label class=\"form-inputs__label\" for=\"full-name\">\n      Full name\n      <span class=\"form-inputs__required-indicator\" aria-hidden=\"true\">*</span>\n    </label>\n\n    <p id=\"full-name-hint\" class=\"form-inputs__hint\">\n      Enter your first and last name.\n    </p>\n\n    <input\n      id=\"full-name\"\n      name=\"fullName\"\n      class=\"form-inputs__control\"\n      type=\"text\"\n      [(ngModel)]=\"name\"\n      [attr.aria-required]=\"true\"\n      [attr.aria-invalid]=\"showNameError()\"\n      [attr.aria-describedby]=\"showNameError() ? 'full-name-hint full-name-error' : 'full-name-hint'\"\n    />\n\n    @if (showNameError()) {\n      <p id=\"full-name-error\" class=\"form-inputs__error\" role=\"alert\">\n        Full name is required.\n      </p>\n    }\n  </div>\n\n  <div class=\"form-inputs__field\">\n    <label class=\"form-inputs__label\" for=\"favorite-framework\">\n      Favorite framework\n      <span class=\"form-inputs__required-indicator\" aria-hidden=\"true\">*</span>\n    </label>\n\n    <p id=\"favorite-framework-hint\" class=\"form-inputs__hint\">\n      Choose the framework you work with most often.\n    </p>\n\n    <select\n      id=\"favorite-framework\"\n      name=\"favoriteFramework\"\n      class=\"form-inputs__control\"\n      [(ngModel)]=\"favoriteFramework\"\n      [attr.aria-required]=\"true\"\n      [attr.aria-invalid]=\"showFrameworkError()\"\n      [attr.aria-describedby]=\"showFrameworkError() ? 'favorite-framework-hint favorite-framework-error' : 'favorite-framework-hint'\"\n    >\n      <option value=\"\">Select one option</option>\n      <option value=\"angular\">Angular</option>\n      <option value=\"react\">React</option>\n      <option value=\"vue\">Vue</option>\n      <option value=\"svelte\">Svelte</option>\n    </select>\n\n    @if (showFrameworkError()) {\n      <p id=\"favorite-framework-error\" class=\"form-inputs__error\" role=\"alert\">\n        Favorite framework is required.\n      </p>\n    }\n  </div>\n\n  <fieldset\n    class=\"form-inputs__field form-inputs__fieldset\"\n    [attr.aria-describedby]=\"showContactMethodError() ? 'contact-method-hint contact-method-error' : 'contact-method-hint'\"\n  >\n    <legend class=\"form-inputs__label\">\n      Preferred contact method\n      <span class=\"form-inputs__required-indicator\" aria-hidden=\"true\">*</span>\n    </legend>\n\n    <p id=\"contact-method-hint\" class=\"form-inputs__hint\">\n      Select one contact method.\n    </p>\n\n    <div class=\"form-inputs__choice-group\">\n      <label class=\"form-inputs__choice\">\n        <input\n          type=\"radio\"\n          name=\"contactMethod\"\n          value=\"email\"\n          [(ngModel)]=\"contactMethod\"\n        />\n        <span>Email</span>\n      </label>\n\n      <label class=\"form-inputs__choice\">\n        <input\n          type=\"radio\"\n          name=\"contactMethod\"\n          value=\"phone\"\n          [(ngModel)]=\"contactMethod\"\n        />\n        <span>Phone</span>\n      </label>\n    </div>\n\n    @if (showContactMethodError()) {\n      <p id=\"contact-method-error\" class=\"form-inputs__error\" role=\"alert\">\n        Preferred contact method is required.\n      </p>\n    }\n  </fieldset>\n\n  <div class=\"form-inputs__field\">\n    <label class=\"form-inputs__choice form-inputs__choice--checkbox\">\n      <input\n        type=\"checkbox\"\n        name=\"subscribeToUpdates\"\n        [(ngModel)]=\"subscribeToUpdates\"\n      />\n      <span>Subscribe to accessibility updates</span>\n    </label>\n  </div>\n\n  <div class=\"form-inputs__field\">\n    <label class=\"form-inputs__label\" for=\"notes\">\n      Additional notes\n    </label>\n\n    <p id=\"notes-hint\" class=\"form-inputs__hint\">\n      Optional. Share anything else that would help.\n    </p>\n\n    <textarea\n      id=\"notes\"\n      name=\"notes\"\n      class=\"form-inputs__control form-inputs__control--textarea\"\n      [(ngModel)]=\"notes\"\n      aria-describedby=\"notes-hint\"\n      rows=\"5\"\n    ></textarea>\n  </div>\n\n  <div class=\"form-inputs__actions\">\n    <button class=\"form-inputs__submit\" type=\"submit\">\n      Submit form\n    </button>\n  </div>\n</form>\n"
         },
         {
+            "name": "FormsScreen",
+            "id": "component-FormsScreen-8752cd91d19d81eedc4be8b4d72a86012434ea7fcad3ee571a1480d6a1ac2699e5a2ac21dc7fc4c7a509ff3f3144ed89b8ff92a0a79808ce63af4e3c79f22a57",
+            "file": "src/app/screens/forms/forms-screen.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-forms-screen",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./forms-screen.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "FormInputs"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { FormInputs } from '../../components/form-inputs/form-inputs';\n\n@Component({\n  selector: 'app-forms-screen',\n  imports: [FormInputs],\n  templateUrl: './forms-screen.html',\n  styleUrl: './forms-screen.scss'\n})\nexport class FormsScreen {}\n",
+            "styleUrl": "./forms-screen.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "<section class=\"demo-page\">\n  <h1>Form Inputs</h1>\n  <p>Accessible text, select, radio, checkbox, and textarea controls with validation.</p>\n\n  <section class=\"demo-page__section\" aria-labelledby=\"form-demo-heading\">\n    <h2 id=\"form-demo-heading\">Interactive demo</h2>\n    <app-form-inputs></app-form-inputs>\n  </section>\n</section>\n"
+        },
+        {
             "name": "HeaderComponent",
             "id": "component-HeaderComponent-48b9abe37706bc42f20cfa97ed9f943678344ea7d254c0c82183c657750c2191b43486fe730c778627b2ea6aa0e2f33a7abcf3ce08b68ad18b062ad99ea97acb",
             "file": "src/stories/header.component.ts",
@@ -2824,6 +2804,48 @@
             ],
             "stylesData": "",
             "extends": []
+        },
+        {
+            "name": "HomeScreen",
+            "id": "component-HomeScreen-27576bc27ca21cb0814ccbdc60835c3da601b38056555d6f06a0a99b7aa62df871cd3fed604ef0101afb7fbff8e634e929ea84e87807d899a01a3a504fd17a60",
+            "file": "src/app/screens/home/home-screen.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-home-screen",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./home-screen.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "RouterLink"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { RouterLink } from '@angular/router';\n\n@Component({\n  selector: 'app-home-screen',\n  imports: [RouterLink],\n  templateUrl: './home-screen.html',\n  styleUrl: './home-screen.scss'\n})\nexport class HomeScreen {}\n",
+            "styleUrl": "./home-screen.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "<section class=\"demo-page\">\n  <h1>Accessible Angular Component Library</h1>\n  <p>Internal training demo for WCAG 2.1 compliant components.</p>\n\n  <nav aria-label=\"Component demo pages\" class=\"demo-page__nav\">\n    <ul class=\"demo-page__list\">\n      <li><a routerLink=\"/forms\">Form Inputs</a></li>\n      <li><a routerLink=\"/modal\">Modal Dialog</a></li>\n      <li><a routerLink=\"/table\">Data Table</a></li>\n      <li><a routerLink=\"/dropdown\">Dropdown Menu</a></li>\n      <li><a routerLink=\"/tabs-accordion\">Tabs and Accordion</a></li>\n      <li><a routerLink=\"/toast-datepicker\">Toast and Date Picker</a></li>\n    </ul>\n  </nav>\n\n  <section class=\"demo-page__section\">\n    <h2>About this demo</h2>\n    <p>\n      Each page demonstrates accessible patterns, keyboard support, semantic structure,\n      and ARIA usage in a more realistic layout than a single long page.\n    </p>\n  </section>\n</section>\n"
         },
         {
             "name": "ModalDialog",
@@ -3201,8 +3223,115 @@
             "templateData": "@if (open) {\n  <div\n    class=\"modal-dialog__backdrop\"\n    (click)=\"onBackdropClick()\"\n  >\n    <div\n      #dialogPanel\n      class=\"modal-dialog__panel\"\n      role=\"dialog\"\n      aria-modal=\"true\"\n      [attr.aria-labelledby]=\"'modal-dialog-title'\"\n      [attr.aria-describedby]=\"description ? 'modal-dialog-description' : null\"\n      tabindex=\"-1\"\n      (click)=\"onPanelClick($event)\"\n    >\n      <div class=\"modal-dialog__header\">\n        <div class=\"modal-dialog__heading-group\">\n          <h2 id=\"modal-dialog-title\" class=\"modal-dialog__title\">\n            {{ title }}\n          </h2>\n\n          @if (description) {\n            <p id=\"modal-dialog-description\" class=\"modal-dialog__description\">\n              {{ description }}\n            </p>\n          }\n        </div>\n\n        <button\n          class=\"modal-dialog__close\"\n          type=\"button\"\n          aria-label=\"Close dialog\"\n          (click)=\"close()\"\n        >\n          ×\n        </button>\n      </div>\n\n      <div class=\"modal-dialog__content\">\n        <ng-content></ng-content>\n      </div>\n\n      <div class=\"modal-dialog__footer\">\n        <button\n          class=\"modal-dialog__secondary-button\"\n          type=\"button\"\n          (click)=\"close()\"\n        >\n          Cancel\n        </button>\n\n        <button\n          class=\"modal-dialog__primary-button\"\n          type=\"button\"\n        >\n          Confirm\n        </button>\n      </div>\n    </div>\n  </div>\n}\n"
         },
         {
+            "name": "ModalScreen",
+            "id": "component-ModalScreen-cd4d6d1b15ff839786a5f6345931f0efa06100ec63e010c82291a42aa805ee53e81b4f30914546d92f460308135af6a06eef97b1d05014ca0060acf86391f270",
+            "file": "src/app/screens/modal/modal-screen.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-modal-screen",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./modal-screen.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "isModalOpen",
+                    "defaultValue": "signal(false)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "closeModal",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 21,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onModalOpenChange",
+                    "args": [
+                        {
+                            "name": "value",
+                            "type": "boolean",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 17,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "value",
+                            "type": "boolean",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "openModal",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 13,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "ModalDialog"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, signal } from '@angular/core';\nimport { ModalDialog } from '../../components/modal-dialog/modal-dialog';\n\n@Component({\n  selector: 'app-modal-screen',\n  imports: [ModalDialog],\n  templateUrl: './modal-screen.html',\n  styleUrl: './modal-screen.scss'\n})\nexport class ModalScreen {\n  isModalOpen = signal(false);\n\n  openModal(): void {\n    this.isModalOpen.set(true);\n  }\n\n  onModalOpenChange(value: boolean): void {\n    this.isModalOpen.set(value);\n  }\n\n  closeModal(): void {\n    this.isModalOpen.set(false);\n  }\n}\n",
+            "styleUrl": "./modal-screen.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "<section class=\"demo-page\">\n  <h1>Modal Dialog</h1>\n  <p>Accessible modal dialog demo.</p>\n\n  <section class=\"demo-page__section\" aria-labelledby=\"modal-demo-heading\">\n    <h2 id=\"modal-demo-heading\">Interactive demo</h2>\n\n    <button\n      class=\"demo-button\"\n      type=\"button\"\n      (click)=\"openModal()\"\n    >\n      Open modal dialog\n    </button>\n\n    <div class=\"demo-page__spacer\">\n      <app-modal-dialog\n        [open]=\"isModalOpen()\"\n        title=\"Delete item\"\n        [description]=\"'This action cannot be undone. Please confirm if you want to continue.'\"\n        [closeOnBackdropClick]=\"true\"\n        (openChange)=\"onModalOpenChange($event)\"\n      >\n        <p>\n          This is a real interactive demo. Open it with the button, then test\n          keyboard navigation, Escape, and focus return to the trigger.\n        </p>\n      </app-modal-dialog>\n    </div>\n  </section>\n</section>\n"
+        },
+        {
             "name": "NavigationBar",
-            "id": "component-NavigationBar-475d95b616724177b4fe91a9d1c6dc337ac951e546b7ad9fe4d520f851938ed607a3aa4139138e0fd70ca75dbe77016dabc00d5fe247b647750af83dd065b511",
+            "id": "component-NavigationBar-f5cab4a1b2d049b1c9dea36a505c9a4f1accd40d537d052f71eac1f5862fb823eb743f414837a4d33044e44e4a40404603b1f5f86e4c665ece03de2d04a8fd6e",
             "file": "src/app/components/navigation-bar/navigation-bar.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -3229,7 +3358,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 24
+                    "line": 25
                 },
                 {
                     "name": "mobileMenuOpen",
@@ -3240,18 +3369,18 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 23
+                    "line": 24
                 },
                 {
                     "name": "navItems",
-                    "defaultValue": "[\n    { label: 'Home', href: '#home' },\n    {\n      label: 'Components',\n      children: [\n        { label: 'Skip Navigation', href: '#skip-navigation' },\n        { label: 'Navigation Bar', href: '#navigation-bar' },\n        { label: 'Modal Dialog', href: '#modal-dialog' },\n        { label: 'Form Inputs', href: '#form-inputs' },\n        { label: 'Data Table', href: '#data-table' },\n        { label: 'Dropdown Menu', href: '#dropdown-menu' },\n        { label: 'Tabs', href: '#tabs' },\n        { label: 'Accordion', href: '#accordion' },\n        { label: 'Toast Alert', href: '#toast-alert' },\n        { label: 'Date Picker', href: '#date-picker' },\n      ],\n    },\n    { label: 'Documentation', href: '#documentation' },\n    { label: 'Contact', href: '#contact' },\n  ]",
+                    "defaultValue": "[\n    { label: 'Home', route: '/' },\n    {\n      label: 'Components',\n      children: [\n        { label: 'Forms', route: '/forms' },\n        { label: 'Modal Dialog', route: '/modal' },\n        { label: 'Data Table', route: '/table' },\n        { label: 'Dropdown Menu', route: '/dropdown' },\n        { label: 'Tabs and Accordion', route: '/tabs-accordion' },\n        { label: 'Toast and Date Picker', route: '/toast-datepicker' },\n      ],\n    },\n  ]",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "NavItem[]",
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 26
+                    "line": 27
                 }
             ],
             "methodsClass": [
@@ -3261,7 +3390,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 51,
+                    "line": 46,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -3271,7 +3400,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 63,
+                    "line": 58,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -3290,7 +3419,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 128,
+                    "line": 126,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "decorators": [
@@ -3331,7 +3460,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 88,
+                    "line": 81,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -3363,7 +3492,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 67,
+                    "line": 62,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -3381,12 +3510,22 @@
                     ]
                 },
                 {
+                    "name": "onNavigate",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 120,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
                     "name": "openProductsMenu",
                     "args": [],
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 59,
+                    "line": 54,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -3396,7 +3535,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 47,
+                    "line": 42,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -3406,7 +3545,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 55,
+                    "line": 50,
                     "deprecated": false,
                     "deprecationMessage": ""
                 }
@@ -3432,7 +3571,7 @@
                     ],
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "line": 128
+                    "line": 126
                 }
             ],
             "standalone": true,
@@ -3440,18 +3579,24 @@
                 {
                     "name": "CommonModule",
                     "type": "module"
+                },
+                {
+                    "name": "RouterLink"
+                },
+                {
+                    "name": "RouterLinkActive"
                 }
             ],
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { Component, HostListener, signal } from '@angular/core';\n\ninterface NavChildItem {\n  label: string;\n  href: string;\n}\n\ninterface NavItem {\n  label: string;\n  href?: string;\n  children?: NavChildItem[];\n}\n\n@Component({\n  selector: 'app-navigation-bar',\n  standalone: true,\n  imports: [CommonModule],\n  templateUrl: './navigation-bar.html',\n  styleUrl: './navigation-bar.scss',\n})\nexport class NavigationBar {\n  mobileMenuOpen = signal(false);\n  componentsMenuOpen = signal(false);\n\n  navItems: NavItem[] = [\n    { label: 'Home', href: '#home' },\n    {\n      label: 'Components',\n      children: [\n        { label: 'Skip Navigation', href: '#skip-navigation' },\n        { label: 'Navigation Bar', href: '#navigation-bar' },\n        { label: 'Modal Dialog', href: '#modal-dialog' },\n        { label: 'Form Inputs', href: '#form-inputs' },\n        { label: 'Data Table', href: '#data-table' },\n        { label: 'Dropdown Menu', href: '#dropdown-menu' },\n        { label: 'Tabs', href: '#tabs' },\n        { label: 'Accordion', href: '#accordion' },\n        { label: 'Toast Alert', href: '#toast-alert' },\n        { label: 'Date Picker', href: '#date-picker' },\n      ],\n    },\n    { label: 'Documentation', href: '#documentation' },\n    { label: 'Contact', href: '#contact' },\n  ];\n\n  toggleMobileMenu(): void {\n    this.mobileMenuOpen.update((value) => !value);\n  }\n\n  closeMobileMenu(): void {\n    this.mobileMenuOpen.set(false);\n  }\n\n  toggleProductsMenu(): void {\n    this.componentsMenuOpen.update((value) => !value);\n  }\n\n  openProductsMenu(): void {\n    this.componentsMenuOpen.set(true);\n  }\n\n  closeProductsMenu(): void {\n    this.componentsMenuOpen.set(false);\n  }\n\n  onMenuButtonKeydown(event: KeyboardEvent): void {\n    switch (event.key) {\n      case 'ArrowDown':\n      case 'Enter':\n      case ' ':\n        event.preventDefault();\n        this.openProductsMenu();\n        setTimeout(() => {\n          const firstItem = document.querySelector<HTMLElement>(\n            '#components-menu a'\n          );\n          firstItem?.focus();\n        });\n        break;\n      case 'Escape':\n        event.preventDefault();\n        this.closeProductsMenu();\n        break;\n    }\n  }\n\n  onDropdownItemKeydown(event: KeyboardEvent): void {\n    const items = Array.from(\n      document.querySelectorAll<HTMLElement>('#components-menu a')\n    );\n\n    const currentIndex = items.findIndex((item) => item === document.activeElement);\n\n    switch (event.key) {\n      case 'ArrowDown': {\n        event.preventDefault();\n        const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;\n        items[nextIndex]?.focus();\n        break;\n      }\n      case 'ArrowUp': {\n        event.preventDefault();\n        const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;\n        items[prevIndex]?.focus();\n        break;\n      }\n      case 'Home':\n        event.preventDefault();\n        items[0]?.focus();\n        break;\n      case 'End':\n        event.preventDefault();\n        items[items.length - 1]?.focus();\n        break;\n      case 'Escape':\n        event.preventDefault();\n        this.closeProductsMenu();\n        document.getElementById('components-menu-button')?.focus();\n        break;\n      case 'Tab':\n        this.closeProductsMenu();\n        break;\n    }\n  }\n\n  @HostListener('document:click', ['$event'])\n  onDocumentClick(event: MouseEvent): void {\n    const target = event.target as HTMLElement | null;\n    if (!target?.closest('.navigation-bar')) {\n      this.closeProductsMenu();\n    }\n  }\n}\n",
+            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { Component, HostListener, signal } from '@angular/core';\nimport { RouterLink, RouterLinkActive } from '@angular/router';\n\ninterface NavChildItem {\n  label: string;\n  route: string;\n}\n\ninterface NavItem {\n  label: string;\n  route?: string;\n  children?: NavChildItem[];\n}\n\n@Component({\n  selector: 'app-navigation-bar',\n  standalone: true,\n  imports: [CommonModule, RouterLink, RouterLinkActive],\n  templateUrl: './navigation-bar.html',\n  styleUrl: './navigation-bar.scss',\n})\nexport class NavigationBar {\n  mobileMenuOpen = signal(false);\n  componentsMenuOpen = signal(false);\n\n  navItems: NavItem[] = [\n    { label: 'Home', route: '/' },\n    {\n      label: 'Components',\n      children: [\n        { label: 'Forms', route: '/forms' },\n        { label: 'Modal Dialog', route: '/modal' },\n        { label: 'Data Table', route: '/table' },\n        { label: 'Dropdown Menu', route: '/dropdown' },\n        { label: 'Tabs and Accordion', route: '/tabs-accordion' },\n        { label: 'Toast and Date Picker', route: '/toast-datepicker' },\n      ],\n    },\n  ];\n\n  toggleMobileMenu(): void {\n    this.mobileMenuOpen.update((value) => !value);\n  }\n\n  closeMobileMenu(): void {\n    this.mobileMenuOpen.set(false);\n  }\n\n  toggleProductsMenu(): void {\n    this.componentsMenuOpen.update((value) => !value);\n  }\n\n  openProductsMenu(): void {\n    this.componentsMenuOpen.set(true);\n  }\n\n  closeProductsMenu(): void {\n    this.componentsMenuOpen.set(false);\n  }\n\n  onMenuButtonKeydown(event: KeyboardEvent): void {\n    switch (event.key) {\n      case 'ArrowDown':\n      case 'Enter':\n      case ' ':\n        event.preventDefault();\n        this.openProductsMenu();\n        setTimeout(() => {\n          const firstItem = document.querySelector<HTMLElement>('#components-menu a');\n          firstItem?.focus();\n        });\n        break;\n      case 'Escape':\n        event.preventDefault();\n        this.closeProductsMenu();\n        break;\n    }\n  }\n\n  onDropdownItemKeydown(event: KeyboardEvent): void {\n    const items = Array.from(\n      document.querySelectorAll<HTMLElement>('#components-menu a')\n    );\n\n    const currentIndex = items.findIndex((item) => item === document.activeElement);\n\n    switch (event.key) {\n      case 'ArrowDown': {\n        event.preventDefault();\n        const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;\n        items[nextIndex]?.focus();\n        break;\n      }\n      case 'ArrowUp': {\n        event.preventDefault();\n        const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;\n        items[prevIndex]?.focus();\n        break;\n      }\n      case 'Home':\n        event.preventDefault();\n        items[0]?.focus();\n        break;\n      case 'End':\n        event.preventDefault();\n        items[items.length - 1]?.focus();\n        break;\n      case 'Escape':\n        event.preventDefault();\n        this.closeProductsMenu();\n        document.getElementById('components-menu-button')?.focus();\n        break;\n      case 'Tab':\n        this.closeProductsMenu();\n        break;\n    }\n  }\n\n  onNavigate(): void {\n    this.closeProductsMenu();\n    this.closeMobileMenu();\n  }\n\n  @HostListener('document:click', ['$event'])\n  onDocumentClick(event: MouseEvent): void {\n    const target = event.target as HTMLElement | null;\n    if (!target?.closest('.navigation-bar')) {\n      this.closeProductsMenu();\n    }\n  }\n}\n",
             "styleUrl": "./navigation-bar.scss",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
             "extends": [],
-            "templateData": "<nav class=\"navigation-bar\" aria-label=\"Primary\">\n  <div class=\"navigation-bar__inner\">\n    <a class=\"navigation-bar__brand\" href=\"#home\">\n      MindTeams A11y Demo\n    </a>\n\n    <button\n      class=\"navigation-bar__mobile-toggle\"\n      type=\"button\"\n      [attr.aria-expanded]=\"mobileMenuOpen()\"\n      aria-controls=\"primary-navigation\"\n      aria-label=\"Toggle navigation menu\"\n      (click)=\"toggleMobileMenu()\"\n    >\n      <span class=\"navigation-bar__mobile-toggle-line\"></span>\n      <span class=\"navigation-bar__mobile-toggle-line\"></span>\n      <span class=\"navigation-bar__mobile-toggle-line\"></span>\n    </button>\n\n    <div\n      id=\"primary-navigation\"\n      class=\"navigation-bar__menu\"\n      [class.navigation-bar__menu--open]=\"mobileMenuOpen()\"\n    >\n      <ul class=\"navigation-bar__list\">\n        @for (item of navItems; track item.label) {\n          <li class=\"navigation-bar__item\">\n            @if (!item.children?.length) {\n              <a\n                class=\"navigation-bar__link\"\n                [href]=\"item.href || '#'\"\n                (click)=\"closeMobileMenu()\"\n              >\n                {{ item.label }}\n              </a>\n            } @else {\n              <div\n                class=\"navigation-bar__dropdown\"\n                [class.navigation-bar__dropdown--open]=\"componentsMenuOpen()\"\n              >\n                <button\n                  id=\"components-menu-button\"\n                  class=\"navigation-bar__link navigation-bar__dropdown-trigger\"\n                  type=\"button\"\n                  aria-haspopup=\"true\"\n                  [attr.aria-expanded]=\"componentsMenuOpen()\"\n                  aria-controls=\"components-menu\"\n                  (click)=\"toggleProductsMenu()\"\n                  (keydown)=\"onMenuButtonKeydown($event)\"\n                >\n                  {{ item.label }}\n                  <span class=\"navigation-bar__caret\" aria-hidden=\"true\">\n                    <svg\n                      class=\"navigation-bar__caret-icon\"\n                      viewBox=\"0 0 24 24\"\n                      focusable=\"false\"\n                    >\n                      <path\n                        d=\"M6 9l6 6 6-6\"\n                        fill=\"none\"\n                        stroke=\"currentColor\"\n                        stroke-width=\"2\"\n                        stroke-linecap=\"round\"\n                        stroke-linejoin=\"round\"\n                      />\n                    </svg>\n                  </span>\n                </button>\n\n                <ul\n                  id=\"components-menu\"\n                  class=\"navigation-bar__dropdown-menu\"\n                  role=\"menu\"\n                >\n                  @for (child of item.children; track child.label) {\n                    <li role=\"none\">\n                      <a\n                        class=\"navigation-bar__dropdown-link\"\n                        role=\"menuitem\"\n                        [href]=\"child.href\"\n                        (keydown)=\"onDropdownItemKeydown($event)\"\n                        (click)=\"closeProductsMenu(); closeMobileMenu()\"\n                      >\n                        {{ child.label }}\n                      </a>\n                    </li>\n                  }\n                </ul>\n              </div>\n            }\n          </li>\n        }\n      </ul>\n    </div>\n  </div>\n</nav>\n"
+            "templateData": "<nav class=\"navigation-bar\" aria-label=\"Primary\">\n  <div class=\"navigation-bar__inner\">\n    <a class=\"navigation-bar__brand\" routerLink=\"/\" (click)=\"onNavigate()\">\n      MindTeams A11y Demo\n    </a>\n\n    <button\n      class=\"navigation-bar__mobile-toggle\"\n      type=\"button\"\n      [attr.aria-expanded]=\"mobileMenuOpen()\"\n      aria-controls=\"primary-navigation\"\n      aria-label=\"Toggle navigation menu\"\n      (click)=\"toggleMobileMenu()\"\n    >\n      <span class=\"navigation-bar__mobile-toggle-line\"></span>\n      <span class=\"navigation-bar__mobile-toggle-line\"></span>\n      <span class=\"navigation-bar__mobile-toggle-line\"></span>\n    </button>\n\n    <div\n      id=\"primary-navigation\"\n      class=\"navigation-bar__menu\"\n      [class.navigation-bar__menu--open]=\"mobileMenuOpen()\"\n    >\n      <ul class=\"navigation-bar__list\">\n        @for (item of navItems; track item.label) {\n          <li class=\"navigation-bar__item\">\n            @if (!item.children?.length) {\n              <a\n                class=\"navigation-bar__link\"\n                [routerLink]=\"item.route || '/'\"\n                routerLinkActive=\"navigation-bar__link--active\"\n                [routerLinkActiveOptions]=\"{ exact: item.route === '/' }\"\n                (click)=\"onNavigate()\"\n              >\n                {{ item.label }}\n              </a>\n            } @else {\n              <div\n                class=\"navigation-bar__dropdown\"\n                [class.navigation-bar__dropdown--open]=\"componentsMenuOpen()\"\n              >\n                <button\n                  id=\"components-menu-button\"\n                  class=\"navigation-bar__link navigation-bar__dropdown-trigger\"\n                  type=\"button\"\n                  aria-haspopup=\"true\"\n                  [attr.aria-expanded]=\"componentsMenuOpen()\"\n                  [attr.aria-controls]=\"componentsMenuOpen() ? 'components-menu' : null\"\n                  (click)=\"toggleProductsMenu()\"\n                  (keydown)=\"onMenuButtonKeydown($event)\"\n                >\n                  {{ item.label }}\n                  <span class=\"navigation-bar__caret\" aria-hidden=\"true\">\n                    <svg\n                      class=\"navigation-bar__caret-icon\"\n                      viewBox=\"0 0 24 24\"\n                      focusable=\"false\"\n                    >\n                      <path\n                        d=\"M6 9l6 6 6-6\"\n                        fill=\"none\"\n                        stroke=\"currentColor\"\n                        stroke-width=\"2\"\n                        stroke-linecap=\"round\"\n                        stroke-linejoin=\"round\"\n                      />\n                    </svg>\n                  </span>\n                </button>\n\n                <ul\n                  id=\"components-menu\"\n                  class=\"navigation-bar__dropdown-menu\"\n                  role=\"menu\"\n                >\n                  @for (child of item.children; track child.label) {\n                    <li role=\"none\">\n                      <a\n                        class=\"navigation-bar__dropdown-link\"\n                        role=\"menuitem\"\n                        [routerLink]=\"child.route\"\n                        routerLinkActive=\"navigation-bar__dropdown-link--active\"\n                        (keydown)=\"onDropdownItemKeydown($event)\"\n                        (click)=\"onNavigate()\"\n                      >\n                        {{ child.label }}\n                      </a>\n                    </li>\n                  }\n                </ul>\n              </div>\n            }\n          </li>\n        }\n      </ul>\n    </div>\n  </div>\n</nav>\n"
         },
         {
             "name": "PageComponent",
@@ -3549,7 +3694,7 @@
         },
         {
             "name": "SkipNavigation",
-            "id": "component-SkipNavigation-7ef05efe5aea17cdbc1245bd253baa16493eded916cfa8425230ec09f455cd0241305361a94cb10ff506ea2647f149e10b47ad8a0d4b1f960713dfe055c5a44a",
+            "id": "component-SkipNavigation-4268343c45d8530ed9ad03f2df42dffbf09f8ede1f3e92b3f5b0ee4518640e99426dd393af0b619f3c0b24fe720077f0e550802b509c45deb15e3b87617777bd",
             "file": "src/app/components/skip-navigation/skip-navigation.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -3567,10 +3712,10 @@
             "inputsClass": [
                 {
                     "name": "links",
-                    "defaultValue": "[\n    { label: 'Skip to main content', targetId: 'main-content' },\n    { label: 'Skip to navigation', targetId: 'main-navigation' },\n  ]",
+                    "defaultValue": "[\n    { label: 'Skip to main content', targetId: 'main-content' },\n    { label: 'Skip to primary navigation', targetId: 'main-navigation' },\n  ]",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "line": 17,
+                    "line": 16,
                     "type": "SkipLink[]",
                     "decorators": []
                 }
@@ -3601,7 +3746,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 22,
+                    "line": 21,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -3639,7 +3784,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, Input } from '@angular/core';\n\ninterface SkipLink {\n  label: string;\n  targetId: string;\n}\n\n\n@Component({\n  selector: 'app-skip-navigation',\n  standalone: true,\n  imports: [],\n  templateUrl: './skip-navigation.html',\n  styleUrl: './skip-navigation.scss',\n})\nexport class SkipNavigation {\n  @Input() links: SkipLink[] = [\n    { label: 'Skip to main content', targetId: 'main-content' },\n    { label: 'Skip to navigation', targetId: 'main-navigation' },\n  ];\n\n  onSkip(targetId: string, event: Event): void {\n    event.preventDefault();\n\n    const target = document.getElementById(targetId);\n\n    if (!target) {\n      return;\n    }\n\n    if (!target.hasAttribute('tabindex')) {\n      target.setAttribute('tabindex', '-1');\n    }\n\n    target.focus();\n    target.scrollIntoView({ block: 'start', behavior: 'smooth' });\n  }\n}\n",
+            "sourceCode": "import { Component, Input } from '@angular/core';\n\ninterface SkipLink {\n  label: string;\n  targetId: string;\n}\n\n@Component({\n  selector: 'app-skip-navigation',\n  standalone: true,\n  imports: [],\n  templateUrl: './skip-navigation.html',\n  styleUrl: './skip-navigation.scss',\n})\nexport class SkipNavigation {\n  @Input() links: SkipLink[] = [\n    { label: 'Skip to main content', targetId: 'main-content' },\n    { label: 'Skip to primary navigation', targetId: 'main-navigation' },\n  ];\n\n  onSkip(targetId: string, event: Event): void {\n    event.preventDefault();\n\n    const target = document.getElementById(targetId) as HTMLElement | null;\n\n    if (!target) {\n      return;\n    }\n\n    if (!target.hasAttribute('tabindex')) {\n      target.setAttribute('tabindex', '-1');\n    }\n\n    target.focus();\n    target.scrollIntoView({ block: 'start' });\n  }\n}\n",
             "styleUrl": "./skip-navigation.scss",
             "assetsDirs": [],
             "styleUrlsData": "",
@@ -3694,6 +3839,48 @@
             "styleUrlsData": "",
             "stylesData": "\n      .sort-indicator {\n        display: inline-flex;\n        align-items: center;\n        justify-content: center;\n        min-width: 1rem;\n        color: var(--color-text);\n        line-height: 1;\n      }\n\n      .sort-indicator__svg {\n        width: 1rem;\n        height: 1rem;\n        display: block;\n        flex-shrink: 0;\n      }\n    \n",
             "extends": []
+        },
+        {
+            "name": "TableScreen",
+            "id": "component-TableScreen-946b860ea377d172f0e87d3902221a164188a6aa4ef73f32ae190349efc3a3610abffae926cd412604c3e33630f687a75de651694933d771baba82e1e366ded2",
+            "file": "src/app/screens/table/table-screen.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-table-screen",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./table-screen.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "DataTable"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { DataTable } from '../../components/data-table/data-table';\n\n@Component({\n  selector: 'app-table-screen',\n  imports: [DataTable],\n  templateUrl: './table-screen.html',\n  styleUrl: './table-screen.scss'\n})\nexport class TableScreen {}\n",
+            "styleUrl": "./table-screen.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "<section class=\"demo-page\">\n  <h1>Data Table</h1>\n  <p>Accessible table with sortable columns and pagination.</p>\n\n  <section class=\"demo-page__section\" aria-labelledby=\"table-demo-heading\">\n    <h2 id=\"table-demo-heading\">Interactive demo</h2>\n    <app-data-table></app-data-table>\n  </section>\n</section>\n"
         },
         {
             "name": "Tabs",
@@ -3962,6 +4149,51 @@
             "stylesData": "",
             "extends": [],
             "templateData": "<div class=\"tabs\">\n  <div class=\"tabs__header\">\n    <h2 class=\"tabs__title\">Tabs</h2>\n    <p class=\"tabs__description\">\n      Accessible tab interface with keyboard navigation and ARIA relationships.\n    </p>\n  </div>\n\n  <div\n    class=\"tabs__list\"\n    role=\"tablist\"\n    aria-label=\"Component information tabs\"\n  >\n    @for (tab of tabs; track tab.id; let i = $index) {\n      <button\n        #tabButton\n        class=\"tabs__tab\"\n        [class.tabs__tab--active]=\"activeIndex() === i\"\n        type=\"button\"\n        role=\"tab\"\n        [id]=\"getTabId(i)\"\n        [attr.aria-selected]=\"activeIndex() === i\"\n        [attr.aria-controls]=\"getPanelId(i)\"\n        [attr.tabindex]=\"activeIndex() === i ? 0 : -1\"\n        (click)=\"selectTab(i)\"\n        (keydown)=\"onTabKeydown($event, i)\"\n      >\n        {{ tab.label }}\n      </button>\n    }\n  </div>\n\n  @for (tab of tabs; track tab.id; let i = $index) {\n    @if (activeIndex() === i) {\n      <section\n        class=\"tabs__panel\"\n        role=\"tabpanel\"\n        [id]=\"getPanelId(i)\"\n        [attr.aria-labelledby]=\"getTabId(i)\"\n        tabindex=\"0\"\n      >\n        <p>{{ tab.content }}</p>\n      </section>\n    }\n  }\n</div>\n"
+        },
+        {
+            "name": "TabsAccordionScreen",
+            "id": "component-TabsAccordionScreen-7af29bc8cc799f6f3bbf91f33ae27ced7a2275b80be4b603d49df14f7cc46da60ad57614cebc98ce8a06754d1ca456790fbdf1e5b97169d67732250623811984",
+            "file": "src/app/screens/tabs-accordion/tabs-accordion-screen.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-tabs-accordion-screen",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./tabs-accordion-screen.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "Tabs"
+                },
+                {
+                    "name": "Accordion"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { Tabs } from '../../components/tabs/tabs';\nimport { Accordion } from '../../components/accordion/accordion';\n\n@Component({\n  selector: 'app-tabs-accordion-screen',\n  imports: [Tabs, Accordion],\n  templateUrl: './tabs-accordion-screen.html',\n  styleUrl: './tabs-accordion-screen.scss'\n})\nexport class TabsAccordionScreen {}\n",
+            "styleUrl": "./tabs-accordion-screen.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "<section class=\"demo-page\">\n  <h1>Tabs and Accordion</h1>\n  <p>Accessible disclosure and panel patterns with keyboard navigation and ARIA relationships.</p>\n\n  <section class=\"demo-page__section\" aria-labelledby=\"tabs-demo-heading\">\n    <h2 id=\"tabs-demo-heading\">Tabs</h2>\n    <app-tabs></app-tabs>\n  </section>\n\n  <section class=\"demo-page__section\" aria-labelledby=\"accordion-demo-heading\">\n    <h2 id=\"accordion-demo-heading\">Accordion</h2>\n    <app-accordion></app-accordion>\n  </section>\n</section>\n"
         },
         {
             "name": "ToastAlert",
@@ -4254,6 +4486,51 @@
                 "OnDestroy"
             ],
             "templateData": "<div class=\"toast-alert\">\n  <div class=\"toast-alert__header\">\n    <h2 class=\"toast-alert__title\">Toast / Alert</h2>\n    <p class=\"toast-alert__description\">\n      Accessible live-region notifications with optional auto-dismiss and manual close.\n    </p>\n  </div>\n\n  <div class=\"toast-alert__actions\">\n    <button\n      class=\"toast-alert__action-button\"\n      type=\"button\"\n      (click)=\"showSuccessToast()\"\n    >\n      Show success toast\n    </button>\n\n    <button\n      class=\"toast-alert__action-button\"\n      type=\"button\"\n      (click)=\"showInfoToast()\"\n    >\n      Show info toast\n    </button>\n\n    <button\n      class=\"toast-alert__action-button\"\n      type=\"button\"\n      (click)=\"showWarningToast()\"\n    >\n      Show warning alert\n    </button>\n\n    <button\n      class=\"toast-alert__action-button\"\n      type=\"button\"\n      (click)=\"showErrorToast()\"\n    >\n      Show error alert\n    </button>\n  </div>\n\n  <div class=\"toast-alert__stack\" aria-live=\"polite\" aria-relevant=\"additions removals\">\n    @for (toast of toasts(); track toast.id) {\n      <section\n        class=\"toast-alert__item\"\n        [class.toast-alert__item--success]=\"toast.type === 'success'\"\n        [class.toast-alert__item--info]=\"toast.type === 'info'\"\n        [class.toast-alert__item--warning]=\"toast.type === 'warning'\"\n        [class.toast-alert__item--error]=\"toast.type === 'error'\"\n        [attr.role]=\"getToastRole(toast.type)\"\n        [attr.aria-live]=\"getToastRole(toast.type) === 'alert' ? 'assertive' : 'polite'\"\n      >\n        <div class=\"toast-alert__content\">\n          <h3 class=\"toast-alert__item-title\">{{ toast.title }}</h3>\n          <p class=\"toast-alert__item-message\">{{ toast.message }}</p>\n        </div>\n\n        <button\n          class=\"toast-alert__dismiss\"\n          type=\"button\"\n          [attr.aria-label]=\"'Dismiss ' + toast.title\"\n          (click)=\"dismissToast(toast.id)\"\n        >\n          ×\n        </button>\n      </section>\n    }\n  </div>\n</div>\n"
+        },
+        {
+            "name": "ToastDatepickerScreen",
+            "id": "component-ToastDatepickerScreen-24af5123fda80b717a7536d82e87275b74a2b5542d90a1948215e756a49ec4dd231fad2030931f92da2bac05b39e35d637a1b3edacf09f6b3b3efb0235983df5",
+            "file": "src/app/screens/toast-datepicker/toast-datepicker-screen.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-toast-datepicker-screen",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./toast-datepicker-screen.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "ToastAlert"
+                },
+                {
+                    "name": "DatePicker"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { ToastAlert } from '../../components/toast-alert/toast-alert';\nimport { DatePicker } from '../../components/date-picker/date-picker';\n\n@Component({\n  selector: 'app-toast-datepicker-screen',\n  imports: [ToastAlert, DatePicker],\n  templateUrl: './toast-datepicker-screen.html',\n  styleUrl: './toast-datepicker-screen.scss'\n})\nexport class ToastDatepickerScreen {}\n",
+            "styleUrl": "./toast-datepicker-screen.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "<section class=\"demo-page\">\n  <h1>Toast and Date Picker</h1>\n  <p>Accessible live regions and calendar interactions.</p>\n\n  <section class=\"demo-page__section\" aria-labelledby=\"toast-demo-heading\">\n    <h2 id=\"toast-demo-heading\">Toast / Alert</h2>\n    <app-toast-alert></app-toast-alert>\n  </section>\n\n  <section class=\"demo-page__section\" aria-labelledby=\"datepicker-demo-heading\">\n    <h2 id=\"datepicker-demo-heading\">Date Picker</h2>\n    <app-date-picker></app-date-picker>\n  </section>\n</section>\n"
         }
     ],
     "modules": [],
@@ -4339,7 +4616,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "Routes",
-                "defaultValue": "[]"
+                "defaultValue": "[\n  { path: '', component: HomeScreen, title: 'WCAG Demo - Home' },\n  { path: 'forms', component: FormsScreen, title: 'WCAG Demo - Forms' },\n  { path: 'modal', component: ModalScreen, title: 'WCAG Demo - Modal Dialog' },\n  { path: 'table', component: TableScreen, title: 'WCAG Demo - Data Table' },\n  { path: 'dropdown', component: DropdownScreen, title: 'WCAG Demo - Dropdown Menu' },\n  { path: 'tabs-accordion', component: TabsAccordionScreen, title: 'WCAG Demo - Tabs and Accordion' },\n  { path: 'toast-datepicker', component: ToastDatepickerScreen, title: 'WCAG Demo - Toast and Date Picker' },\n  { path: '**', redirectTo: '' }\n]"
             },
             {
                 "name": "serverConfig",
@@ -4532,7 +4809,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "Routes",
-                    "defaultValue": "[]"
+                    "defaultValue": "[\n  { path: '', component: HomeScreen, title: 'WCAG Demo - Home' },\n  { path: 'forms', component: FormsScreen, title: 'WCAG Demo - Forms' },\n  { path: 'modal', component: ModalScreen, title: 'WCAG Demo - Modal Dialog' },\n  { path: 'table', component: TableScreen, title: 'WCAG Demo - Data Table' },\n  { path: 'dropdown', component: DropdownScreen, title: 'WCAG Demo - Dropdown Menu' },\n  { path: 'tabs-accordion', component: TabsAccordionScreen, title: 'WCAG Demo - Tabs and Accordion' },\n  { path: 'toast-datepicker', component: ToastDatepickerScreen, title: 'WCAG Demo - Toast and Date Picker' },\n  { path: '**', redirectTo: '' }\n]"
                 }
             ],
             "src/app/app.routes.server.ts": [
@@ -4630,10 +4907,53 @@
     "routes": {
         "name": "<root>",
         "kind": "module",
-        "children": []
+        "children": [
+            {
+                "name": "HomeScreen",
+                "kind": "component",
+                "path": "",
+                "filename": "src/app/app.routes.ts"
+            },
+            {
+                "name": "FormsScreen",
+                "kind": "component",
+                "path": "forms",
+                "filename": "src/app/app.routes.ts"
+            },
+            {
+                "name": "ModalScreen",
+                "kind": "component",
+                "path": "modal",
+                "filename": "src/app/app.routes.ts"
+            },
+            {
+                "name": "TableScreen",
+                "kind": "component",
+                "path": "table",
+                "filename": "src/app/app.routes.ts"
+            },
+            {
+                "name": "DropdownScreen",
+                "kind": "component",
+                "path": "dropdown",
+                "filename": "src/app/app.routes.ts"
+            },
+            {
+                "name": "TabsAccordionScreen",
+                "kind": "component",
+                "path": "tabs-accordion",
+                "filename": "src/app/app.routes.ts"
+            },
+            {
+                "name": "ToastDatepickerScreen",
+                "kind": "component",
+                "path": "toast-datepicker",
+                "filename": "src/app/app.routes.ts"
+            }
+        ]
     },
     "coverage": {
-        "count": 4,
+        "count": 3,
         "status": "low",
         "files": [
             {
@@ -4692,7 +5012,7 @@
                 "linktype": "component",
                 "name": "App",
                 "coveragePercent": 0,
-                "coverageCount": "0/6",
+                "coverageCount": "0/1",
                 "status": "low"
             },
             {
@@ -4831,7 +5151,7 @@
                 "linktype": "component",
                 "name": "NavigationBar",
                 "coveragePercent": 0,
-                "coverageCount": "0/13",
+                "coverageCount": "0/14",
                 "status": "low"
             },
             {
@@ -4931,6 +5251,69 @@
                 "linktype": "miscellaneous",
                 "linksubtype": "typealias",
                 "name": "ToastType",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/screens/dropdown/dropdown-screen.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "DropdownScreen",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/screens/forms/forms-screen.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "FormsScreen",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/screens/home/home-screen.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "HomeScreen",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/screens/modal/modal-screen.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ModalScreen",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/screens/table/table-screen.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "TableScreen",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/screens/tabs-accordion/tabs-accordion-screen.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "TabsAccordionScreen",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/screens/toast-datepicker/toast-datepicker-screen.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ToastDatepickerScreen",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"

@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { App } from './app';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
@@ -14,23 +16,30 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render main heading', async () => {
-    const fixture = TestBed.createComponent(App);
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent?.trim()).toBe(
-      'Accessible Angular Component Library',
-    );
-  });
-
   it('should render skip navigation', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('app-skip-navigation')).toBeTruthy();
+  });
+
+  it('should render navigation bar', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('app-navigation-bar')).toBeTruthy();
+  });
+
+  it('should render header landmark', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const header = compiled.querySelector('header#main-navigation');
+
+    expect(header).toBeTruthy();
   });
 
   it('should render main landmark', () => {
@@ -43,33 +52,21 @@ describe('App', () => {
     expect(main).toBeTruthy();
   });
 
-  it('should open modal when openModal is called', () => {
+  it('should render router outlet content container', () => {
     const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
+    fixture.detectChanges();
 
-    app.openModal();
-
-    expect(app.isModalOpen()).toBe(true);
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
   });
 
-  it('should update modal state from openChange handler', () => {
+  it('should set main content tabindex to -1', () => {
     const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
+    fixture.detectChanges();
 
-    app.onModalOpenChange(true);
-    expect(app.isModalOpen()).toBe(true);
+    const compiled = fixture.nativeElement as HTMLElement;
+    const main = compiled.querySelector('main#main-content');
 
-    app.onModalOpenChange(false);
-    expect(app.isModalOpen()).toBe(false);
-  });
-
-  it('should close modal when closeModal is called', () => {
-    const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
-
-    app.isModalOpen.set(true);
-    app.closeModal();
-
-    expect(app.isModalOpen()).toBe(false);
+    expect(main?.getAttribute('tabindex')).toBe('-1');
   });
 });

@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { NavigationBar } from './navigation-bar';
 
 describe('NavigationBarComponent', () => {
@@ -8,6 +9,7 @@ describe('NavigationBarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NavigationBar],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NavigationBar);
@@ -39,10 +41,27 @@ describe('NavigationBarComponent', () => {
     expect(component.componentsMenuOpen()).toBeFalsy();
   });
 
+  it('should close menus on navigate', () => {
+    component.mobileMenuOpen.set(true);
+    component.componentsMenuOpen.set(true);
+
+    component.onNavigate();
+
+    expect(component.mobileMenuOpen()).toBeFalsy();
+    expect(component.componentsMenuOpen()).toBeFalsy();
+  });
+
   it('should render navigation landmark', () => {
     const element: HTMLElement = fixture.nativeElement;
     const nav = element.querySelector('nav[aria-label="Primary"]');
 
     expect(nav).toBeTruthy();
+  });
+
+  it('should render router links', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    const links = element.querySelectorAll('a');
+
+    expect(links.length).toBeGreaterThan(0);
   });
 });

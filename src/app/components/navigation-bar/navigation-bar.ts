@@ -1,21 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, signal } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 interface NavChildItem {
   label: string;
-  href: string;
+  route: string;
 }
 
 interface NavItem {
   label: string;
-  href?: string;
+  route?: string;
   children?: NavChildItem[];
 }
 
 @Component({
   selector: 'app-navigation-bar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './navigation-bar.html',
   styleUrl: './navigation-bar.scss',
 })
@@ -24,24 +25,18 @@ export class NavigationBar {
   componentsMenuOpen = signal(false);
 
   navItems: NavItem[] = [
-    { label: 'Home', href: '#home' },
+    { label: 'Home', route: '/' },
     {
       label: 'Components',
       children: [
-        { label: 'Skip Navigation', href: '#skip-navigation' },
-        { label: 'Navigation Bar', href: '#navigation-bar' },
-        { label: 'Modal Dialog', href: '#modal-dialog' },
-        { label: 'Form Inputs', href: '#form-inputs' },
-        { label: 'Data Table', href: '#data-table' },
-        { label: 'Dropdown Menu', href: '#dropdown-menu' },
-        { label: 'Tabs', href: '#tabs' },
-        { label: 'Accordion', href: '#accordion' },
-        { label: 'Toast Alert', href: '#toast-alert' },
-        { label: 'Date Picker', href: '#date-picker' },
+        { label: 'Forms', route: '/forms' },
+        { label: 'Modal Dialog', route: '/modal' },
+        { label: 'Data Table', route: '/table' },
+        { label: 'Dropdown Menu', route: '/dropdown' },
+        { label: 'Tabs and Accordion', route: '/tabs-accordion' },
+        { label: 'Toast and Date Picker', route: '/toast-datepicker' },
       ],
     },
-    { label: 'Documentation', href: '#documentation' },
-    { label: 'Contact', href: '#contact' },
   ];
 
   toggleMobileMenu(): void {
@@ -72,9 +67,7 @@ export class NavigationBar {
         event.preventDefault();
         this.openProductsMenu();
         setTimeout(() => {
-          const firstItem = document.querySelector<HTMLElement>(
-            '#components-menu a'
-          );
+          const firstItem = document.querySelector<HTMLElement>('#components-menu a');
           firstItem?.focus();
         });
         break;
@@ -122,6 +115,11 @@ export class NavigationBar {
         this.closeProductsMenu();
         break;
     }
+  }
+
+  onNavigate(): void {
+    this.closeProductsMenu();
+    this.closeMobileMenu();
   }
 
   @HostListener('document:click', ['$event'])

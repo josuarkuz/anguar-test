@@ -5,7 +5,6 @@ interface SkipLink {
   targetId: string;
 }
 
-
 @Component({
   selector: 'app-skip-navigation',
   standalone: true,
@@ -16,13 +15,13 @@ interface SkipLink {
 export class SkipNavigation {
   @Input() links: SkipLink[] = [
     { label: 'Skip to main content', targetId: 'main-content' },
-    { label: 'Skip to navigation', targetId: 'main-navigation' },
+    { label: 'Skip to primary navigation', targetId: 'main-navigation' },
   ];
 
   onSkip(targetId: string, event: Event): void {
     event.preventDefault();
 
-    const target = document.getElementById(targetId);
+    const target = document.getElementById(targetId) as HTMLElement | null;
 
     if (!target) {
       return;
@@ -33,6 +32,6 @@ export class SkipNavigation {
     }
 
     target.focus();
-    target.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    target.scrollIntoView({ block: 'start' });
   }
 }

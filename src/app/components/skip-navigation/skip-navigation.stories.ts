@@ -15,19 +15,21 @@ const meta: Meta<SkipNavigation> = {
     template: `
       <app-skip-navigation [links]="links"></app-skip-navigation>
 
-      <header style="padding: 24px; background: #f8f9fb;">
-        <nav id="main-navigation" tabindex="-1">Main navigation target</nav>
+      <header id="main-navigation" tabindex="-1" style="padding: 24px; background: #f8f9fb;">
+        <h2>Primary navigation target</h2>
+        <p>This simulates the app header/navigation landmark.</p>
       </header>
 
       <main id="main-content" tabindex="-1" style="padding: 24px; min-height: 240px;">
-        Main content target
+        <h2>Main content target</h2>
+        <p>This simulates the routed page content area.</p>
       </main>
     `,
   }),
   args: {
     links: [
       { label: 'Skip to main content', targetId: 'main-content' },
-      { label: 'Skip to navigation', targetId: 'main-navigation' },
+      { label: 'Skip to primary navigation', targetId: 'main-navigation' },
     ],
   },
 };

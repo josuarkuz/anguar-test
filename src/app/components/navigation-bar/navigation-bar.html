@@ -1,6 +1,6 @@
 <nav class="navigation-bar" aria-label="Primary">
   <div class="navigation-bar__inner">
-    <a class="navigation-bar__brand" href="#home">
+    <a class="navigation-bar__brand" routerLink="/" (click)="onNavigate()">
       MindTeams A11y Demo
     </a>
 
@@ -28,8 +28,10 @@
             @if (!item.children?.length) {
               <a
                 class="navigation-bar__link"
-                [href]="item.href || '#'"
-                (click)="closeMobileMenu()"
+                [routerLink]="item.route || '/'"
+                routerLinkActive="navigation-bar__link--active"
+                [routerLinkActiveOptions]="{ exact: item.route === '/' }"
+                (click)="onNavigate()"
               >
                 {{ item.label }}
               </a>
@@ -77,9 +79,10 @@
                       <a
                         class="navigation-bar__dropdown-link"
                         role="menuitem"
-                        [href]="child.href"
+                        [routerLink]="child.route"
+                        routerLinkActive="navigation-bar__dropdown-link--active"
                         (keydown)="onDropdownItemKeydown($event)"
-                        (click)="closeProductsMenu(); closeMobileMenu()"
+                        (click)="onNavigate()"
                       >
                         {{ child.label }}
                       </a>

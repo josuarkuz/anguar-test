@@ -1,0 +1,31 @@
+<section class="demo-page">
+  <h1>Modal Dialog</h1>
+  <p>Accessible modal dialog demo.</p>
+
+  <section class="demo-page__section" aria-labelledby="modal-demo-heading">
+    <h2 id="modal-demo-heading">Interactive demo</h2>
+
+    <button
+      class="demo-button"
+      type="button"
+      (click)="openModal()"
+    >
+      Open modal dialog
+    </button>
+
+    <div class="demo-page__spacer">
+      <app-modal-dialog
+        [open]="isModalOpen()"
+        title="Delete item"
+        [description]="'This action cannot be undone. Please confirm if you want to continue.'"
+        [closeOnBackdropClick]="true"
+        (openChange)="onModalOpenChange($event)"
+      >
+        <p>
+          This is a real interactive demo. Open it with the button, then test
+          keyboard navigation, Escape, and focus return to the trigger.
+        </p>
+      </app-modal-dialog>
+    </div>
+  </section>
+</section>
