@@ -1,5 +1,10 @@
 .demo-page {
   display: block;
+  max-width: 64rem;
+}
+
+.demo-page__header {
+  margin-bottom: 2rem;
 }
 
 .demo-page__nav {
@@ -15,4 +20,13 @@
 
 .demo-page__section {
   margin-top: 2rem;
+}
+
+a {
+  text-underline-offset: 0.15em;
+}
+
+a:focus-visible {
+  outline: 3px solid #1d4ed8;
+  outline-offset: 3px;
 }

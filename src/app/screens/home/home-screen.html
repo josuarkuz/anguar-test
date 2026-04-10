@@ -1,23 +1,36 @@
-<section class="demo-page">
-  <h1>Accessible Angular Component Library</h1>
-  <p>Internal training demo for WCAG 2.1 compliant components.</p>
+<main class="demo-page" id="main-content">
+  <header class="demo-page__header">
+    <h1>Accessible Angular Component Library</h1>
+    <p id="demo-page-intro">
+      Internal training demo for WCAG 2.1 compliant components.
+    </p>
+  </header>
 
-  <nav aria-label="Component demo pages" class="demo-page__nav">
+  <nav
+    aria-labelledby="demo-page-nav-title"
+    class="demo-page__nav"
+  >
+    <h2 id="demo-page-nav-title">Component demo pages</h2>
+
     <ul class="demo-page__list">
-      <li><a routerLink="/forms">Form Inputs</a></li>
-      <li><a routerLink="/modal">Modal Dialog</a></li>
-      <li><a routerLink="/table">Data Table</a></li>
-      <li><a routerLink="/dropdown">Dropdown Menu</a></li>
-      <li><a routerLink="/tabs-accordion">Tabs and Accordion</a></li>
-      <li><a routerLink="/toast-datepicker">Toast and Date Picker</a></li>
+      <li><a routerLink="/forms">Form input examples</a></li>
+      <li><a routerLink="/modal">Modal dialog example</a></li>
+      <li><a routerLink="/table">Data table example</a></li>
+      <li><a routerLink="/dropdown">Dropdown menu example</a></li>
+      <li><a routerLink="/tabs-accordion">Tabs and accordion examples</a></li>
+      <li><a routerLink="/toast-datepicker">Toast and date picker examples</a></li>
     </ul>
   </nav>
 
-  <section class="demo-page__section">
-    <h2>About this demo</h2>
+  <section
+    class="demo-page__section"
+    aria-labelledby="about-demo-title"
+  >
+    <h2 id="about-demo-title">About this demo</h2>
     <p>
-      Each page demonstrates accessible patterns, keyboard support, semantic structure,
-      and ARIA usage in a more realistic layout than a single long page.
+      Each page demonstrates accessible patterns, keyboard support, semantic
+      structure, and ARIA usage in a more realistic layout than a single long
+      page.
     </p>
   </section>
-</section>
+</main>
