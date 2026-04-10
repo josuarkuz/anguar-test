@@ -1,6 +1,7 @@
 {
   "urls": [
-    "http://localhost:6006"
+    "http://localhost:6006",
+    "http://localhost:6006/?path=/story/components-accordion--default"
   ],
   "defaults": {
     "standard": "WCAG2AA",

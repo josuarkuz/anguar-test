@@ -1,0 +1,16 @@
+{
+  "urls": [
+    "http://localhost:4200",
+    "http://localhost:4200/forms",
+    "http://localhost:4200/modal",
+    "http://localhost:4200/table",
+    "http://localhost:4200/toast-datepicker",
+    "http://localhost:4200/tabs-accordion",
+    "http://localhost:4200/dropdown"
+  ],
+  "defaults": {
+    "standard": "WCAG2AA",
+    "timeout": 30000,
+    "wait": 1000
+  }
+}

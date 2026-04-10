@@ -20,7 +20,7 @@ const meta: Meta<SkipNavigation> = {
         <p>This simulates the app header/navigation landmark.</p>
       </header>
 
-      <main id="main-content" tabindex="-1" style="padding: 24px; min-height: 240px;">
+      <main tabindex="-1" style="padding: 24px; min-height: 240px;">
         <h2>Main content target</h2>
         <p>This simulates the routed page content area.</p>
       </main>
